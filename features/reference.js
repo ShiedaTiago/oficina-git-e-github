@@ -155,18 +155,8 @@
             const lines = String(command.example).split('\n');
             lines.forEach((line, lineIdx) => {
               if (lineIdx > 0) pre.append(document.createTextNode('\n'));
-              const hint = window.Oficina?.explainCommand ? window.Oficina.explainCommand(line) : null;
-              if (hint) {
-                const span = document.createElement('span');
-                span.className = 'cmd-line';
-                span.dataset.cmdHint = hint;
-                span.title = hint;
-                span.tabIndex = 0;
-                span.textContent = line;
-                pre.append(span);
-              } else {
-                pre.append(document.createTextNode(line));
-              }
+              if (window.Oficina?.renderCommandLine) pre.append(window.Oficina.renderCommandLine(line));
+              else pre.append(document.createTextNode(line));
             });
             article.append(pre);
           }

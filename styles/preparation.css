@@ -1,9 +1,11 @@
 .preparation { max-width: 65rem; }
 .preparation label { display: flex; flex-wrap: wrap; gap: .7rem; align-items: center; font-weight: 700; }
 .preparation select { border: 1px solid var(--line); border-radius: .4rem; padding: .6rem 2rem .6rem .8rem; background: var(--surface); color: var(--ink); }
-.preparation h3 { margin-top: 1.5rem; }
-.preparation h4 { margin: 1rem 0 .5rem; }
-.preparation pre, .guide pre { background: var(--ink); color: var(--surface); padding: 1rem; border-radius: .5rem; max-width: 100%; }
+.preparation h3 { margin: .65rem 0 .35rem; font-size: 1rem; }
+.preparation h4 { margin: .55rem 0 .3rem; font-size: .85rem; }
+.preparation p { margin-bottom: .55rem; }
+.preparation pre, .guide pre { background: var(--ink); color: var(--surface); padding: .65rem .8rem; border-radius: .5rem; max-width: 100%; font-size: .82rem; line-height: 1.35; }
+.preparation-note { padding: .6rem .8rem; border-left: 3px solid var(--accent); background: var(--accent-soft); border-radius: 0 .5rem .5rem 0; font-size: .82rem; }
 .preparation-links { display: flex; flex-wrap: wrap; gap: 1rem 2rem; }
 .guide { max-width: 54rem; margin: 0 auto; padding: clamp(1.1rem, 4vw, 3rem); overflow-wrap: anywhere; }
 .guide header { border-bottom: 2px solid var(--line); margin-bottom: 2rem; }
@@ -20,4 +22,11 @@
   .guide .skip-link { display: none; }
   .guide pre { white-space: pre-wrap; border: 1px solid #777; background: white; color: black; }
   .guide section { break-inside: avoid; }
+}
+@media (max-height: 500px) {
+  .preparation h3 { margin: .25rem 0 .15rem; font-size: .78rem; }
+  .preparation h4, .preparation-note { display: none; }
+  .preparation p { margin-bottom: .2rem; font-size: .7rem; }
+  .preparation pre { margin-bottom: .25rem; padding: .35rem .5rem; font-size: .68rem; }
+  .preparation-links { gap: .5rem; font-size: .7rem; }
 }

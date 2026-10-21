@@ -19,15 +19,13 @@
     const fragment = document.createDocumentFragment();
     if (os === 'windows') {
       fragment.append(node('h3', 'Windows · Git Bash'), node('p',
-        'Baixe o instalador oficial do Git for Windows pelo guia abaixo. Mantenha Git Bash e Git Credential Manager disponíveis. Depois de instalar, abra o Git Bash pelo menu Iniciar e use esse terminal nos exercícios.'));
+        'Instale o Git for Windows pelo guia e abra o Git Bash. Mantenha o Git Credential Manager disponível para autenticar pelo navegador.'));
     } else {
       fragment.append(node('h3', 'Linux · terminal da distribuição'), node('p',
-        'Abra o aplicativo Terminal. Instale apenas pelo gerenciador da sua distribuição; sudo pede a senha do computador. Se não tiver permissão, peça ajuda a quem administra a máquina.'),
-      node('h4', 'Debian / Ubuntu / Mint'), code('sudo apt update\nsudo apt install git'),
-      node('h4', 'Fedora'), code('sudo dnf install git'));
+        'Instale pelo gerenciador da sua distribuição. sudo pede a senha do computador; sem permissão, peça ajuda.'),
+      node('h4', 'Debian / Ubuntu / Mint · Fedora'), code('sudo apt update && sudo apt install git\nsudo dnf install git'));
     }
-    fragment.append(node('h3', 'Confira o terminal e a pasta'), code('git --version\npwd\nls'),
-      node('p', 'git --version deve mostrar Git 2.28 ou superior. pwd mostra sua pasta; ls lista os arquivos. No guia, prepare uma pasta própria e configure nome/e-mail antes do primeiro commit.'));
+    fragment.append(node('h3', 'Confira o terminal'), code('git --version\npwd\nls'));
     return fragment;
   }
 
@@ -51,10 +49,8 @@
       content.replaceChildren(systemContent(select.value));
       status.textContent = `Caminho selecionado: ${select.value === 'linux' ? 'Linux' : 'Windows'}.`;
     };
-    frame.append(node('h2', 'Prepare seu ambiente'), label, status, content,
-      node('h3', 'Identidade, conta e HTTPS'), node('p',
-        'Nome/e-mail identificam commits; não fazem login. Use sua própria identidade ou o e-mail noreply copiado de Settings → Emails do GitHub. Crie e verifique sua conta para a prática em dupla.'),
-      node('p', 'No Windows, o Git Credential Manager permite autenticar pelo navegador. No Linux, o guia mostra o GitHub CLI com HTTPS. Faça o login somente na etapa de conexão: a senha da conta não autentica Git por HTTPS. Nunca coloque credenciais nos arquivos do exercício.'));
+    frame.append(label, status, content,
+      node('p', 'Nome e e-mail identificam commits; não fazem login. Use sua identidade ou o e-mail noreply do GitHub. Nunca coloque credenciais nos arquivos.', 'preparation-note'));
     const links = node('p', undefined, 'preparation-links');
     [['guides/preparacao.html', 'Abrir preparação completa'], ['guides/diagnostico.html', 'Resolver um problema']].forEach(([href, text]) => {
       const link = node('a', text);

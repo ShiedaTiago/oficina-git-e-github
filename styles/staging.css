@@ -1,26 +1,45 @@
-.staging-simulation { background: var(--surface); border: 1px solid var(--line); border-radius: 1rem; padding: 1.25rem; }
+.staging-simulation { background: rgba(255, 253, 248, .78); border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(.55rem, 1.5vw, 1rem); box-shadow: var(--shadow); }
 .staging-explanation, .staging-reason { font-size: .9rem; color: var(--muted); }
 .staging-explanation:last-child { margin: 1rem 0 0; }
-.staging-areas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.staging-areas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(.35rem, 1vw, .8rem); }
 .staging-area { min-width: 0; border-top: 3px solid var(--accent); padding-top: .8rem; }
 .staging-area h3 { font-size: 1.1rem; }
 .staging-field { display: grid; gap: .4rem; font-size: .9rem; font-weight: 600; }
 .staging-field textarea, .staging-field input { width: 100%; min-width: 0; border: 1px solid var(--line); border-radius: .35rem; padding: .6rem; background: var(--surface); color: var(--ink); }
-.staging-field textarea { resize: vertical; min-height: 7rem; font-family: Consolas, monospace; }
+.staging-field textarea { resize: vertical; height: clamp(3.5rem, 9vh, 5.5rem); min-height: 0; font-family: Consolas, monospace; }
 .staging-area > button { margin-top: .65rem; }
 .staging-snapshot, .staging-history pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: .9rem; }
-.staging-snapshot { min-height: 7rem; padding: .75rem; background: var(--paper); border-radius: .35rem; }
-.staging-history { padding-left: 1.4rem; max-height: 13rem; overflow-y: auto; font-size: .85rem; overflow-wrap: anywhere; }
+.staging-snapshot { min-height: clamp(3.5rem, 9vh, 5.5rem); padding: .55rem; background: var(--paper); border-radius: .35rem; }
+.staging-history { padding-left: 1.2rem; max-height: min(12vh, 6rem); overflow-y: auto; font-size: .78rem; overflow-wrap: anywhere; }
 .staging-history li { padding-bottom: .5rem; }
 .staging-history pre { margin: .4rem 0; }
-.staging-actions { display: flex; align-items: end; gap: .7rem; flex-wrap: wrap; margin-top: 1rem; }
+.staging-actions { display: flex; align-items: end; gap: .5rem; flex-wrap: wrap; margin-top: .55rem; }
 .staging-actions .staging-field { flex: 1 1 14rem; }
 .staging-actions button { flex: 0 1 auto; }
 .staging-reason { margin: .6rem 0; }
 .staging-status { font-size: .9rem; min-height: 1.6em; margin-bottom: 0; color: var(--green); }
 @media (max-width: 750px) {
-  .staging-areas { grid-template-columns: 1fr; }
-  .staging-simulation { padding: 1rem; }
+  .staging-areas { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .staging-area h3 { font-size: .78rem; }
+  .staging-field { font-size: .72rem; }
+  .staging-area > button { min-height: 36px; padding: .3rem; font-size: .7rem; }
+  .staging-simulation { padding: .5rem; }
   .staging-actions { align-items: stretch; flex-direction: column; }
   .staging-actions .staging-field { flex-basis: auto; }
+}
+@media (max-height: 800px) {
+  .staging-explanation:last-child, .staging-simulation > .eyebrow { display: none; }
+  .staging-area h3, .staging-explanation, .staging-reason, .staging-status { margin-bottom: .3rem; }
+}
+@media (max-height: 500px) {
+  .staging-explanation, .staging-reason, .staging-status { display: none; }
+  .staging-area { padding-top: .3rem; }
+  .staging-area h3 { margin: 0 0 .2rem; }
+  .staging-field textarea { height: 2.5rem; }
+  .staging-snapshot { min-height: 2.5rem; padding: .3rem; font-size: .65rem; }
+  .staging-history { max-height: 2.5rem; margin-block: .2rem; }
+  .staging-area > button { min-height: 28px; margin-top: .25rem; }
+  .staging-actions { flex-direction: row; align-items: end; margin-top: .3rem; }
+  .staging-actions .staging-field { flex: 1 1 12rem; }
+  .staging-actions button { min-height: 30px; padding-block: .2rem; font-size: .68rem; }
 }

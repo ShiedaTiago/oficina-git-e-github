@@ -1,11 +1,29 @@
-.history-simulator { border: 2px solid currentColor; border-radius: .7rem; padding: 1rem; }
-.history-simulator svg { display: block; width: min(100%, 36rem); height: auto; margin: auto; }
+.history-simulator { border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(.55rem, 1.5vw, .9rem); background: rgba(255, 253, 248, .72); box-shadow: var(--shadow); }
+.history-simulator svg { display: block; width: min(100%, 30rem); max-height: min(22vh, 165px); height: auto; margin: auto; }
 .history-edge { stroke: #495562; stroke-width: 3; }
 .history-node { fill: #f1d6b8; stroke: #713c1b; stroke-width: 3; }
 .history-id { fill: #231f1b; font: bold 15px system-ui, sans-serif; }
 .history-refs { font-weight: 700; overflow-wrap: anywhere; }
-.history-records { padding-left: 1.5rem; overflow-wrap: anywhere; }
+.history-records { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: .25rem 1rem; padding-left: 1.25rem; margin-block: .45rem; overflow-wrap: anywhere; font-size: .78rem; }
 .history-simulator label { display: block; font-weight: 700; }
 .history-simulator textarea { box-sizing: border-box; display: block; width: 100%; margin: .5rem 0 1rem; padding: .75rem; font: inherit; }
-.history-controls { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1rem; }
+.history-controls { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .55rem; }
 .history-simulator button { white-space: normal; }
+.history-simulator.has-conflict svg,
+.history-simulator.has-conflict .history-records { display: none; }
+.history-simulator.has-conflict textarea { max-height: 6rem; resize: vertical; }
+.history-simulator.has-conflict > p { margin-bottom: .35rem; font-size: .78rem; }
+.history-simulator.has-conflict label { font-size: .78rem; }
+.slide:has(.history-simulator.has-conflict) .code-block { display: none; }
+@media (max-height: 800px), (max-width: 600px) {
+  .history-simulator > p { margin-bottom: .35rem; font-size: .76rem; }
+  .history-records { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); }
+  .history-simulator svg { max-height: min(20vh, 125px); }
+}
+@media (max-height: 500px) {
+  .slide:has(.history-simulator.has-conflict) h1 { display: none; }
+  .history-simulator { padding: .35rem; }
+  .history-simulator svg { max-height: 72px; }
+  .history-controls { margin-top: .25rem; }
+  .history-controls button { min-height: 28px; padding-block: .2rem; font-size: .68rem; }
+}

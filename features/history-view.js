@@ -21,11 +21,11 @@
     const svg = svgElement('svg', { viewBox: '0 0 390 205', role: 'img', 'aria-label': 'Histórico de commits; relações de parentesco descritas na lista abaixo' });
     state.commits.forEach(commit => commit.parents.forEach(parent => {
       const [x1,y1] = positions[commit.id], [x2,y2] = positions[parent];
-      svg.append(svgElement('line', { x1,y1,x2,y2, class: 'history-edge' }));
+      svg.append(svgElement('line', { x1,y1,x2,y2, class: 'history-edge', 'data-edge-from': commit.id, 'data-edge-to': parent }));
     }));
     state.commits.forEach(commit => {
       const [cx,cy] = positions[commit.id];
-      svg.append(svgElement('circle', {cx,cy,r:21,class:'history-node'}));
+      svg.append(svgElement('circle', {cx,cy,r:21,class:'history-node','data-node-id':commit.id}));
       svg.append(svgElement('text', {x:cx,y:cy+5,'text-anchor':'middle',class:'history-id'},commit.id));
     });
     return svg;
@@ -38,6 +38,7 @@
     root.append(container);
     function render() {
       const stage = state.conflict ? 4 : state.commits.length === 4 ? 5 : state.branches.aluno ? state.commits.length : 0;
+      container.classList.toggle('has-conflict', Boolean(state.conflict));
       const status = element('p', steps[stage]); status.setAttribute('role', 'status');
       const refs = element('p', `HEAD → ${state.head} · ${Object.entries(state.branches).map(([name,id]) => `${name} → ${id}`).join(' · ')}`);
       refs.className = 'history-refs';
@@ -56,7 +57,7 @@
     function renderEditor() {
       const note = element('p', 'Origem: aluno → destino: main. Remova os marcadores e escolha a saudação final. Validação simplificada: texto não vazio e sem marcadores; o Git real exige revisar, preparar (git add) e registrar a resolução.');
       const label = element('label', 'Texto final de saudacao.txt');
-      const editor = element('textarea'); editor.rows = 7; editor.spellcheck = false;
+      const editor = element('textarea'); editor.rows = 4; editor.spellcheck = false;
       editor.value = state.resolution ?? '<<<<<<< main\nOlá, turma colaborativa!\n=======\nOlá, turma criativa!\n>>>>>>> aluno';
       label.append(editor);
       const complete = button('completeMerge', 'Preparar resolução e concluir merge'); complete.disabled = !api.validHistoryResolution(state.resolution);

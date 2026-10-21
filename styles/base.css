@@ -8,6 +8,8 @@
   --accent: #c64121;
   --accent-soft: #fce4d7;
   --green: #344c3e;
+  --shadow: 0 18px 55px rgba(36, 37, 34, .09);
+  --radius: 14px;
   font-family: 'Segoe UI', system-ui, sans-serif;
   color: var(--ink);
   background: var(--paper);
@@ -33,20 +35,28 @@ pre { overflow-x: auto; white-space: pre; }
 .skip-link:focus { transform: translateY(0); }
 .cmd-line {
   position: relative;
-  display: block;
+  display: inline;
   cursor: help;
   border-radius: 4px;
-  padding: 0.05rem 0.25rem;
-  transition: background-color 0.15s ease;
+  padding: 0.05rem 0;
 }
-.cmd-line:hover,
-.cmd-line:focus-visible {
+.cmd-part {
+  display: inline-block;
+  border-radius: 4px;
+  padding: 0 .12em;
+  cursor: help;
+  transition: color .16s ease, background-color .16s ease, box-shadow .16s ease;
+}
+.cmd-part:hover,
+.cmd-part:focus-visible {
   background-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, .38);
   outline: none;
 }
-:not(pre) > .cmd-line:hover,
-:not(pre) > .cmd-line:focus-visible {
+:not(pre) > .cmd-line .cmd-part:hover,
+:not(pre) > .cmd-line .cmd-part:focus-visible {
   background-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0 0 2px rgba(198, 65, 33, .45);
 }
 .cmd-tooltip {
   position: fixed;
@@ -54,11 +64,11 @@ pre { overflow-x: auto; white-space: pre; }
   background: #1a201c;
   color: #f6f4e9;
   border: 1px solid #4a5048;
-  border-radius: 6px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.32);
   font-size: 0.8rem;
   line-height: 1.4;
-  padding: 0.45rem 0.75rem;
+  padding: 0.6rem 0.8rem;
   pointer-events: none;
   max-width: min(420px, calc(100vw - 2rem));
   opacity: 0;
@@ -73,5 +83,5 @@ pre { overflow-x: auto; white-space: pre; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; }
-  .cmd-line, .cmd-tooltip { transition: none !important; }
+  .cmd-part, .cmd-tooltip { transition: none !important; }
 }

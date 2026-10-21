@@ -15,6 +15,7 @@ const click = action => root.querySelector(`[data-history-action="${action}"]`).
 const toConflict = () => { for(let i=0;i<4;i++) click('advance'); };
 it('renders accessible graph, textual parents, conflict editing and completed merge', () => {
   mount(); expect(root.querySelector('svg[role="img"]')).not.toBeNull();
+  expect(root.querySelector('[data-node-id="c1"]')).not.toBeNull();
   expect(root.textContent).toContain('HEAD → main'); toConflict();
   const editor = root.querySelector('textarea');
   expect(editor.labels.length).toBe(1); expect(editor.value).toContain('<<<<<<< main');
@@ -22,6 +23,9 @@ it('renders accessible graph, textual parents, conflict editing and completed me
   editor.value = '<img src=x onerror=alert(1)>'; editor.dispatchEvent(new Event('input', {bubbles:true}));
   expect(document.activeElement).not.toBeNull(); click('completeMerge');
   expect(root.textContent).toContain('pais: c3, c2'); expect(root.querySelector('img')).toBeNull();
+  expect(root.querySelectorAll('[data-edge-from][data-edge-to]')).toHaveLength(4);
+  expect(root.querySelector('[data-edge-from="c4"][data-edge-to="c3"]')).not.toBeNull();
+  expect(root.querySelector('[data-edge-from="c4"][data-edge-to="c2"]')).not.toBeNull();
   expect(root.textContent).toContain('aluno → c2'); click('reset');
   expect(root.querySelector('textarea')).toBeNull(); expect(root.textContent).toContain('c1');
 });

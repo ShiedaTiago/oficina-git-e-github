@@ -92,6 +92,97 @@ test('mantém o botão Próximo estável ao avançar múltiplos slides', async (
   }
 });
 
+test('mantém a navegação visível no viewport e o tooltip dentro da tela cheia', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await page.goto(`${workshopUrl}#terminal-e-pasta`);
+  await page.getByRole('button', { name: 'Tela cheia' }).click();
+  await expect(page.locator('#app')).toHaveClass(/is-fullscreen/);
+
+  const bounds = await page.evaluate(() => {
+    const footer = document.querySelector('.presentation-footer').getBoundingClientRect();
+    const shell = document.querySelector('.presentation').getBoundingClientRect();
+    const slide = document.querySelector('.slide');
+    return {
+      footerBottom: footer.bottom,
+      shellBottom: shell.bottom,
+      viewport: innerHeight,
+      slideHeight: slide.clientHeight,
+      slideContentHeight: slide.scrollHeight,
+      slideBottom: slide.getBoundingClientRect().bottom,
+      footerTop: footer.top,
+    };
+  });
+  expect(bounds.footerBottom).toBeLessThanOrEqual(bounds.viewport + 1);
+  expect(bounds.shellBottom).toBeLessThanOrEqual(bounds.viewport + 1);
+  expect(bounds.slideContentHeight).toBeLessThanOrEqual(bounds.slideHeight + 1);
+  expect(bounds.slideBottom).toBeLessThanOrEqual(bounds.footerTop + 1);
+
+  const token = page.locator('.code-block .cmd-part').first();
+  await token.hover();
+  await expect(page.locator('#cmd-tooltip')).toBeVisible();
+  expect(await page.locator('#cmd-tooltip').evaluate((node) => node.parentElement?.id)).toBe('app');
+
+  await page.getByRole('button', { name: 'Próximo →' }).click();
+  await expect(page.locator('#cmd-tooltip')).not.toHaveClass(/is-visible/);
+  await expect(page.locator('#cmd-tooltip')).toHaveAttribute('aria-hidden', 'true');
+  await page.evaluate(() => document.exitFullscreen());
+});
+
+test('faz todos os slides caberem nos viewports de validação sem soltar a navegação', async ({ page }) => {
+  const viewports = [
+    { width: 1920, height: 1080 },
+    { width: 1280, height: 720 },
+    { width: 768, height: 1024 },
+    { width: 375, height: 667 },
+    { width: 667, height: 375 },
+  ];
+
+  for (const viewport of viewports) {
+    await page.setViewportSize(viewport);
+    await page.goto(workshopUrl);
+    const ids = await page.evaluate(() => window.Oficina.slides.map((slide) => slide.id));
+    for (const id of ids) {
+      const metrics = await page.evaluate(async (slideId) => {
+        location.hash = slideId;
+        await new Promise((resolveFrame) => requestAnimationFrame(() => requestAnimationFrame(() => requestAnimationFrame(resolveFrame))));
+        const slide = document.querySelector('.slide');
+        const footer = document.querySelector('.presentation-footer').getBoundingClientRect();
+        return {
+          id: slideId,
+          fit: Number(slide.dataset.fit),
+          slideHeight: slide.clientHeight,
+          slideContentHeight: slide.scrollHeight,
+          footerBottom: footer.bottom,
+        };
+      }, id);
+      expect(metrics.slideContentHeight, `${id} em ${viewport.width}x${viewport.height}`).toBeLessThanOrEqual(metrics.slideHeight + 1);
+      expect(metrics.footerBottom, `rodapé em ${id}`).toBeLessThanOrEqual(viewport.height + 1);
+      expect(metrics.fit, `escala legível em ${id}`).toBeGreaterThanOrEqual(.82);
+    }
+  }
+});
+
+test('mantém o editor de conflito do grafo totalmente operável', async ({ page }) => {
+  for (const viewport of [{ width: 1280, height: 720 }, { width: 375, height: 667 }, { width: 667, height: 375 }]) {
+    await page.setViewportSize(viewport);
+    await page.goto(workshopUrl);
+    await page.goto(`${workshopUrl}#simular-historico`);
+    await expect(page.locator('[data-history-action="advance"]')).toBeVisible();
+    for (let step = 0; step < 4; step++) await page.evaluate(() => document.querySelector('[data-history-action="advance"]').click());
+    await page.evaluate(() => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))));
+    const metrics = await page.evaluate(() => {
+      const slide = document.querySelector('.slide');
+      const footer = document.querySelector('.presentation-footer').getBoundingClientRect();
+      const complete = document.querySelector('[data-history-action="completeMerge"]').getBoundingClientRect();
+      const reset = document.querySelector('[data-history-action="reset"]').getBoundingClientRect();
+      return { slideHeight: slide.clientHeight, slideContentHeight: slide.scrollHeight, footerTop: footer.top, completeBottom: complete.bottom, resetBottom: reset.bottom };
+    });
+    expect(metrics.slideContentHeight, `${viewport.width}x${viewport.height}`).toBeLessThanOrEqual(metrics.slideHeight + 1);
+    expect(metrics.completeBottom).toBeLessThanOrEqual(metrics.footerTop);
+    expect(metrics.resetBottom).toBeLessThanOrEqual(metrics.footerTop);
+  }
+});
+
 test.describe('movimento reduzido', () => {
   test.use({ reducedMotion: 'reduce' });
 

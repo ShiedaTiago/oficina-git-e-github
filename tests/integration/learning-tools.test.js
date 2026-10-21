@@ -156,15 +156,19 @@ it('renders manual fallback after clipboard rejection and only reports success a
 it('replaces quiz answers without duplicate scoring and resets memory and controls', () => {
   const host = root(); const api = window.Oficina; const quiz = api.mountQuiz(host, api.questions);
   const choose = value => {const input = host.querySelector(`input[value="${value}"]`); input.checked=true; input.dispatchEvent(new Event('change',{bubbles:true}));};
+  expect(host.querySelectorAll('fieldset')).toHaveLength(1);
+  expect(host.querySelector('[data-quiz-progress]').textContent).toContain('Pergunta 1 de 6');
   choose('b'); expect(host.textContent).toContain('Vamos revisar.'); expect(host.textContent).toContain(api.questions[0].explanation);
   choose('a'); choose('a'); expect(host.querySelector('[role="status"]').textContent).toBe('1 de 6 respostas corretas. 1 respondidas.');
   choose('b'); expect(host.querySelector('[role="status"]').textContent).toContain('0 de 6');
-  host.querySelector('button').click(); expect(host.querySelector('[role="status"]').textContent).toContain('0 respondidas');
+  host.querySelector('[data-quiz-action="next"]').click();
+  expect(host.querySelector('[data-quiz-progress]').textContent).toContain('Pergunta 2 de 6');
+  host.querySelector('[data-quiz-action="reset"]').click(); expect(host.querySelector('[role="status"]').textContent).toContain('0 respondidas');
   expect(host.querySelector('input:checked')).toBeNull(); expect(document.activeElement).toBe(host.querySelector('input'));
   quiz.destroy(); expect(host.children.length).toBe(0);
 });
 it('registers quiz widget and cleans it up with the presentation', () => {
   const host = root(); const api = window.Oficina; api.registerQuiz();
   const deck = api.mountPresentation(host, [{id:'quiz',title:'Quiz',blocks:[{type:'widget',widget:'quiz'}],notes:{}}]);
-  expect(host.querySelectorAll('fieldset')).toHaveLength(6); deck.destroy();
+  expect(host.querySelectorAll('fieldset')).toHaveLength(1); deck.destroy();
 });

@@ -110,11 +110,13 @@ describe('standalone preparation guides', () => {
     expect(doc.documentElement.lang).toBe('pt-BR');
     expect(doc.querySelector('h1')).not.toBeNull();
     expect(doc.querySelector('main')).not.toBeNull();
-    expect(doc.querySelector('script')).toBeNull();
+    expect(doc.querySelector('script[src="../app/presentation.js"]')).not.toBeNull();
+    expect(doc.querySelector('script:not([src])').textContent).toContain('initCommandTooltip');
     expect(doc.querySelector('link[href="../styles/base.css"]')).not.toBeNull();
     expect(doc.querySelector('a[href="../index.html"]')).not.toBeNull();
-    for (const asset of doc.querySelectorAll('link[href]')) {
-      expect(fs.existsSync(path.resolve(path.dirname(file), asset.getAttribute('href')))).toBe(true);
+    for (const asset of doc.querySelectorAll('link[href], script[src]')) {
+      const relativeAsset = asset.getAttribute('href') || asset.getAttribute('src');
+      expect(fs.existsSync(path.resolve(path.dirname(file), relativeAsset))).toBe(true);
     }
   });
 });

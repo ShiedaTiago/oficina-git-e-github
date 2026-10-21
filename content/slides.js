@@ -119,13 +119,21 @@
     {
       id: 'snapshot-preparado', chapter: 'primeiros-commits', title: 'add captura o conteúdo daquele momento.',
       blocks: [
-        { type: 'text', text: 'Se você editar de novo depois de add, o staging continua com a versão anterior. Outro add atualiza a seleção.' },
-        { type: 'widget', widget: 'staging' },
-        { type: 'activity', title: 'Preveja antes de clicar', text: 'Edite → prepare → edite novamente. Qual versão entrará no commit?' },
+        { type: 'text', text: 'Preveja antes de clicar: edite → prepare → edite novamente. O staging mantém a versão capturada pelo add; outro add atualiza a seleção.' },
+        { type: 'activity', title: 'Faça uma previsão', text: 'Qual versão entrará no commit: a preparada ou a edição mais recente?' },
       ],
-      notes: { objective: 'Distinguir a versão preparada da versão de trabalho.', minutes: 6,
+      notes: { objective: 'Distinguir a versão preparada da versão de trabalho.', minutes: 2,
         demo: 'Na simulação, preparar uma versão e depois editar outra. Comparar com diff e diff --staged no terminal.',
         pitfalls: ['add não acompanha edições futuras automaticamente.', 'Um arquivo pode ter mudanças preparadas e não preparadas simultaneamente.'] },
+    },
+    {
+      id: 'simular-staging', chapter: 'primeiros-commits', title: 'Teste o snapshot preparado.',
+      blocks: [
+        { type: 'widget', widget: 'staging' },
+      ],
+      notes: { objective: 'Experimentar a independência entre trabalho e staging.', minutes: 4,
+        demo: 'Preparar uma versão, editar novamente e comparar as três áreas.',
+        pitfalls: ['O simulador é didático e não altera arquivos reais.'] },
     },
     {
       id: 'segundo-commit', chapter: 'primeiros-commits', title: 'Uma mudança com uma explicação.',
@@ -193,12 +201,20 @@
       id: 'navegar-historico', chapter: 'branches', title: 'Trocar de branch muda o ponto de vista.',
       blocks: [
         { type: 'code', code: 'git switch main\ngit log --oneline --graph --all\ngit switch melhoria-descricao' },
-        { type: 'widget', widget: 'history' },
         { type: 'activity', title: 'Checkpoint', text: 'Observe o parágrafo em cada branch. Qual rótulo andou depois do novo commit?' },
       ],
-      notes: { objective: 'Relacionar arquivos visíveis e posição da branch atual.', minutes: 6,
+      notes: { objective: 'Relacionar arquivos visíveis e posição da branch atual.', minutes: 2,
         demo: 'Alternar com árvore limpa e recarregar a página. Na simulação, acompanhar os rótulos e os commits existentes.',
         pitfalls: ['A mudança não sumiu: ela está registrada na outra branch.', 'O gráfico completo pode divergir do desenho se a turma criou commits adicionais.'] },
+    },
+    {
+      id: 'simular-historico', chapter: 'branches', title: 'Veja as branches se separarem.',
+      blocks: [
+        { type: 'widget', widget: 'history' },
+      ],
+      notes: { objective: 'Acompanhar rótulos, pais e merge sem perder nenhum nó.', minutes: 4,
+        demo: 'Avançar até o conflito, resolver e apontar os dois pais do commit de merge.',
+        pitfalls: ['A simulação usa IDs didáticos; hashes reais são diferentes.'] },
     },
     {
       id: 'integrar-branch', chapter: 'branches', title: 'Integre a ideia em main.',

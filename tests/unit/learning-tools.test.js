@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 beforeEach(async () => {
   vi.resetModules(); delete window.Oficina;
-  for (const file of ['content/commands.js', 'content/questions.js', 'features/reference.js', 'features/clipboard.js', 'features/quiz.js']) {
+  for (const file of ['content/commands.js', 'app/presentation.js', 'content/questions.js', 'features/reference.js', 'features/clipboard.js', 'features/quiz.js']) {
     if (fs.existsSync(file)) await import(/* @vite-ignore */ path.resolve(file));
   }
 });
@@ -183,4 +183,13 @@ it('provides accurate command explanations for branches, status, diffs, conflict
   expect(explain('sudo apt update')).toContain('Atualiza a lista de pacotes no terminal Linux');
   expect(explain('sudo apt install git')).toContain('Instala o Git pelo gerenciador de pacotes apt');
   expect(explain('sudo dnf install git')).toContain('Instala o Git pelo gerenciador de pacotes dnf no Fedora');
+});
+it('explains executable, action, option and arguments as distinct command parts', () => {
+  const parts = window.Oficina.explainCommandParts('git push -u origin main').filter(part => part.hint);
+  expect(parts.map(part => part.text)).toEqual(['git', 'push', '-u', 'origin', 'main']);
+  expect(parts[0].hint).toContain('Git');
+  expect(parts[1].hint).toContain('Envia commits');
+  expect(parts[2].hint).toContain('upstream');
+  expect(parts[3].hint).toContain('remoto');
+  expect(parts[4].hint).toContain('branch principal');
 });

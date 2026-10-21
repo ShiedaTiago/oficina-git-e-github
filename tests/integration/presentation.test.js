@@ -228,7 +228,7 @@ describe('presentation lifecycle and navigation', () => {
     expect(cmdLine).not.toBeNull();
     expect(cmdLine.textContent).toBe('git status');
     expect(cmdLine.dataset.cmdHint).toContain('Exibe o estado dos arquivos');
-    expect(cmdLine.tabIndex).toBe(0);
+    expect(cmdLine.querySelectorAll('.cmd-part[tabindex="0"]')).toHaveLength(2);
 
     const tooltip = document.getElementById('cmd-tooltip');
     expect(tooltip).not.toBeNull();
@@ -250,6 +250,38 @@ describe('presentation lifecycle and navigation', () => {
     // Focusout hides tooltip
     cmdLine.dispatchEvent(new FocusEvent('focusout', { bubbles: true }));
     expect(tooltip.classList.contains('is-visible')).toBe(false);
+  });
+  it('explains each meaningful command token and links the focused token to the tooltip', () => {
+    mount();
+    const parts = [...root.querySelectorAll('code .cmd-part')];
+    expect(parts.map((part) => part.textContent)).toEqual(['git', 'status']);
+    expect(parts[0].dataset.cmdHint).toContain('Git');
+    expect(parts[1].dataset.cmdHint).toContain('estado');
+
+    parts[1].dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    expect(parts[1].getAttribute('aria-describedby')).toBe('cmd-tooltip');
+    expect(document.getElementById('cmd-tooltip').parentElement).toBe(root);
+    parts[1].dispatchEvent(new FocusEvent('focusout', { bubbles: true }));
+    expect(parts[1].hasAttribute('aria-describedby')).toBe(false);
+  });
+  it('hides stale command help when navigating to another slide', () => {
+    mount();
+    const token = root.querySelector('code .cmd-part');
+    token.dispatchEvent(new MouseEvent('mouseover', { bubbles: true }));
+    expect(document.getElementById('cmd-tooltip').classList.contains('is-visible')).toBe(true);
+
+    root.querySelector('[data-action="next"]').click();
+    expect(document.getElementById('cmd-tooltip').classList.contains('is-visible')).toBe(false);
+    expect(document.getElementById('cmd-tooltip').getAttribute('aria-hidden')).toBe('true');
+  });
+  it('upgrades command lines from standalone guides to token-level help', () => {
+    const guide = document.createElement('div');
+    guide.innerHTML = '<pre><code><span class="cmd-line" data-cmd-hint="Enviar commits" tabindex="0">git push -u origin main</span></code></pre>';
+    document.body.append(guide);
+    const destroy = window.Oficina.initCommandTooltip(guide);
+    expect([...guide.querySelectorAll('.cmd-part')].map(part => part.textContent)).toEqual(['git', 'push', '-u', 'origin', 'main']);
+    destroy();
+    guide.remove();
   });
   it('keeps footer navigation buttons anchored and progress stably formatted', () => {
     mount();

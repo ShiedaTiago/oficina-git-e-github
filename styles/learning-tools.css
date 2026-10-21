@@ -22,9 +22,20 @@
 .learning-quiz fieldset { margin-block: 1rem; padding: 1rem; }
 .learning-quiz label { display: block; padding-block: .5rem; cursor: pointer; }
 .learning-quiz input { margin-inline-end: .75rem; }
+.quiz-progress { margin-bottom: .35rem; color: var(--accent); font-size: .8rem; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }
+.quiz-controls { display: flex; flex-wrap: wrap; gap: .55rem; }
+.quiz-controls button { min-height: 40px; padding: .45rem .75rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); }
+.quiz-controls [data-quiz-action="next"] { background: var(--green); color: white; border-color: var(--green); }
 @media (max-width: 650px) {
   .command-card { padding: .85rem; }
   .command-card pre { font-size: .78rem; }
   .category-chips { gap: .35rem; }
   .category-filter-btn { font-size: .8rem; padding: .3rem .6rem; min-height: 36px; }
+}
+@media (max-height: 500px) {
+  .learning-quiz fieldset { margin-block: .25rem; padding: .45rem; }
+  .learning-quiz label { padding-block: .18rem; font-size: .72rem; }
+  .learning-quiz [data-feedback] { margin-bottom: .25rem; font-size: .68rem; }
+  .quiz-progress, .learning-quiz > [role="status"] { margin-bottom: .2rem; font-size: .68rem; }
+  .quiz-controls button { min-height: 28px; padding-block: .2rem; font-size: .68rem; }
 }

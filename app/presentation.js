@@ -279,8 +279,126 @@
     return null;
   }
 
+  const executableHints = {
+    git: 'Executa o Git, o programa que controla o histórico do repositório.',
+    gh: 'Executa o GitHub CLI para conversar com o GitHub pelo terminal.',
+    pwd: 'Mostra a pasta atual do terminal.',
+    ls: 'Lista arquivos e pastas no local atual.',
+    cd: 'Muda a pasta atual do terminal.',
+    mkdir: 'Cria uma nova pasta.',
+    sudo: 'Executa a ação seguinte com permissão administrativa no Linux.',
+  };
+
+  const gitPartHints = {
+    add: 'Seleciona o conteúdo para o próximo snapshot no staging.',
+    branch: 'Consulta ou gerencia branches do repositório.',
+    'check-ignore': 'Confere se um caminho está coberto por regras de ignore.',
+    clone: 'Baixa um repositório remoto e todo o histórico disponível.',
+    commit: 'Registra o snapshot preparado como um novo commit.',
+    config: 'Consulta ou altera configurações do Git.',
+    diff: 'Compara versões do conteúdo para revelar mudanças.',
+    fetch: 'Busca dados do remoto sem alterar os arquivos de trabalho.',
+    init: 'Inicia um repositório Git nesta pasta.',
+    log: 'Exibe o histórico de commits.',
+    merge: 'Integra o histórico de outra branch na branch atual.',
+    pull: 'Busca e integra commits do remoto.',
+    push: 'Envia commits locais para um repositório remoto.',
+    remote: 'Consulta ou configura repositórios remotos.',
+    restore: 'Restaura conteúdo ou retira arquivos do staging.',
+    revert: 'Cria um commit novo que desfaz outro commit.',
+    show: 'Mostra detalhes e alterações de um commit.',
+    status: 'Mostra o estado dos arquivos, do staging e da branch atual.',
+    switch: 'Troca de branch ou cria uma nova branch.',
+  };
+
+  const optionHints = {
+    '-a': 'Inclui todas as branches locais e remotas na listagem.',
+    '-b': 'Define explicitamente o nome da branch inicial.',
+    '-c': 'Cria uma nova branch antes de mudar para ela.',
+    '-d': 'Exclui uma branch local somente quando a integração já é segura.',
+    '-D': 'Força a exclusão da branch local, mesmo sem integração.',
+    '-m': 'Informa a mensagem do commit diretamente no comando.',
+    '-p': 'Cria também as pastas intermediárias que ainda não existem.',
+    '-s': 'Pede uma saída curta e compacta.',
+    '-u': 'Configura a branch remota como upstream para os próximos push e pull.',
+    '--abort': 'Cancela a operação em andamento e volta ao estado anterior.',
+    '--all': 'Inclui todas as referências disponíveis.',
+    '--cached': 'Compara o staging, também chamado de índice, com o último commit.',
+    '--check': 'Procura espaços problemáticos e marcadores de conflito.',
+    '--decorate': 'Mostra nomes de branches e tags junto aos commits.',
+    '--ff-only': 'Permite a integração apenas por avanço direto, sem merge commit.',
+    '--get': 'Consulta apenas o valor configurado para a chave seguinte.',
+    '--global': 'Aplica ou consulta a configuração para o usuário deste computador.',
+    '--graph': 'Desenha as ramificações do histórico em caracteres.',
+    '--local': 'Aplica a configuração somente ao repositório atual.',
+    '--no-edit': 'Usa a mensagem padrão sem abrir um editor de texto.',
+    '--oneline': 'Resume cada commit em uma única linha.',
+    '--short': 'Pede uma saída curta e compacta.',
+    '--show-current': 'Mostra somente o nome da branch atual.',
+    '--staged': 'Compara o staging com o último commit.',
+    '--version': 'Pede que o programa mostre sua versão instalada.',
+  };
+
+  function commandPartHint(token, index, tokens, line) {
+    const plain = token.replace(/^["']|["']$/g, '');
+    if (index === 0 && executableHints[plain]) return executableHints[plain];
+    if (tokens[0] === 'git' && index === 1 && gitPartHints[plain]) return gitPartHints[plain];
+    if (optionHints[plain]) return optionHints[plain];
+    if (/^https:\/\//.test(plain)) return 'URL do repositório remoto usado pelo comando.';
+    if (plain === 'origin') return 'Nome convencional do repositório remoto principal.';
+    if (plain === 'main') return 'Nome da branch principal usada neste exemplo.';
+    if (plain === 'HEAD') return 'Referência para o commit atual da branch em uso.';
+    if (/^user\.(name|email)$/.test(plain)) return `Chave de configuração que guarda ${plain.endsWith('name') ? 'o nome' : 'o e-mail'} de autoria.`;
+    if (tokens[index - 1] === '-m') return 'Mensagem que descreve o objetivo do commit.';
+    if (plain === '--') return 'Separa as opções do comando dos caminhos de arquivo que vêm depois.';
+    if (/^-\d+$/.test(plain)) return `Limita a saída aos ${plain.slice(1)} registros mais recentes.`;
+    if (/[/\\]|\.[a-z0-9]{1,8}$/i.test(plain)) return 'Caminho de arquivo, pasta ou repositório usado como argumento.';
+    if (/^(<<<<<<<|=======|>>>>>>>)/.test(line)) return explainCommand(line);
+    const action = tokens[1] || tokens[0];
+    return `Argumento “${plain}” usado pela ação ${action}.`;
+  }
+
+  function explainCommandParts(raw) {
+    if (typeof raw !== 'string') return [];
+    const line = raw.trim();
+    if (!line) return [];
+    if (line.startsWith('#') || /^(<<<<<<<|=======|>>>>>>>)/.test(line)) {
+      return [{ text: line, hint: explainCommand(line) }];
+    }
+    const chunks = line.match(/\s+|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|[^\s]+/g) || [];
+    const tokens = chunks.filter((chunk) => !/^\s+$/.test(chunk));
+    let tokenIndex = 0;
+    return chunks.map((chunk) => {
+      if (/^\s+$/.test(chunk)) return { text: chunk, hint: null };
+      const hint = commandPartHint(chunk, tokenIndex, tokens, line);
+      tokenIndex += 1;
+      return { text: chunk, hint };
+    });
+  }
+
+  function renderCommandLine(raw) {
+    const line = element('span', 'cmd-line');
+    const lineHint = explainCommand(raw);
+    if (lineHint) line.dataset.cmdHint = lineHint;
+    explainCommandParts(raw).forEach((part) => {
+      if (!part.hint) {
+        line.append(document.createTextNode(part.text));
+        return;
+      }
+      const token = element('span', 'cmd-part', part.text);
+      token.dataset.cmdHint = part.hint;
+      token.title = part.hint;
+      token.tabIndex = 0;
+      line.append(token);
+    });
+    return line;
+  }
+
   function initCommandTooltip(scope) {
     const targetScope = scope || document;
+    targetScope.querySelectorAll?.('.cmd-line[data-cmd-hint]').forEach((line) => {
+      if (!line.querySelector('.cmd-part')) line.replaceWith(renderCommandLine(line.textContent));
+    });
     let tooltip = document.getElementById('cmd-tooltip');
     if (!tooltip) {
       tooltip = document.createElement('div');
@@ -288,8 +406,9 @@
       tooltip.className = 'cmd-tooltip';
       tooltip.setAttribute('role', 'tooltip');
       tooltip.setAttribute('aria-hidden', 'true');
-      document.body.append(tooltip);
     }
+    const tooltipHost = targetScope.body || targetScope;
+    tooltipHost.append(tooltip);
 
     let activeTarget = null;
 
@@ -300,6 +419,7 @@
       tooltip.textContent = hint;
       tooltip.classList.add('is-visible');
       tooltip.setAttribute('aria-hidden', 'false');
+      target.setAttribute('aria-describedby', tooltip.id);
 
       if (target.title) {
         target.dataset.originalTitle = target.title;
@@ -315,6 +435,7 @@
           activeTarget.title = activeTarget.dataset.originalTitle;
           delete activeTarget.dataset.originalTitle;
         }
+        activeTarget.removeAttribute('aria-describedby');
         activeTarget = null;
         tooltip.classList.remove('is-visible');
         tooltip.setAttribute('aria-hidden', 'true');
@@ -344,28 +465,28 @@
     }
 
     function onMouseOver(e) {
-      const target = e.target.closest?.('.cmd-line[data-cmd-hint]');
+      const target = e.target.closest?.('.cmd-part[data-cmd-hint], .cmd-line[data-cmd-hint]');
       if (target && targetScope.contains(target)) {
         showTooltip(target);
       }
     }
 
     function onMouseOut(e) {
-      const target = e.target.closest?.('.cmd-line[data-cmd-hint]');
+      const target = e.target.closest?.('.cmd-part[data-cmd-hint], .cmd-line[data-cmd-hint]');
       if (target) {
         hideTooltip(target);
       }
     }
 
     function onFocusIn(e) {
-      const target = e.target.closest?.('.cmd-line[data-cmd-hint]');
+      const target = e.target.closest?.('.cmd-part[data-cmd-hint], .cmd-line[data-cmd-hint]');
       if (target && targetScope.contains(target)) {
         showTooltip(target);
       }
     }
 
     function onFocusOut(e) {
-      const target = e.target.closest?.('.cmd-line[data-cmd-hint]');
+      const target = e.target.closest?.('.cmd-part[data-cmd-hint], .cmd-line[data-cmd-hint]');
       if (target) {
         hideTooltip(target);
       }
@@ -381,6 +502,8 @@
     targetScope.addEventListener('mouseout', onMouseOut);
     targetScope.addEventListener('focusin', onFocusIn);
     targetScope.addEventListener('focusout', onFocusOut);
+    const onTooltipHide = () => hideTooltip();
+    targetScope.addEventListener('oficina:tooltip-hide', onTooltipHide);
     window.addEventListener('scroll', onScroll, { passive: true });
 
     return function destroy() {
@@ -388,6 +511,7 @@
       targetScope.removeEventListener('mouseout', onMouseOut);
       targetScope.removeEventListener('focusin', onFocusIn);
       targetScope.removeEventListener('focusout', onFocusOut);
+      targetScope.removeEventListener('oficina:tooltip-hide', onTooltipHide);
       window.removeEventListener('scroll', onScroll);
       hideTooltip();
     };
@@ -408,16 +532,7 @@
         const lines = String(rawCode).split('\n');
         lines.forEach((line, lineIndex) => {
           if (lineIndex > 0) codeNode.append(document.createTextNode('\n'));
-          const hint = explainCommand(line);
-          if (hint) {
-            const span = element('span', 'cmd-line', line);
-            span.dataset.cmdHint = hint;
-            span.title = hint;
-            span.tabIndex = 0;
-            codeNode.append(span);
-          } else {
-            codeNode.append(document.createTextNode(line));
-          }
+          codeNode.append(renderCommandLine(line));
         });
         pre.append(codeNode);
         frame.append(pre);
@@ -482,8 +597,10 @@
     let cleanups = [];
     let destroyed = false;
     let previousFocus;
+    let fitFrame = 0;
     root.replaceChildren();
     root.className = 'presentation';
+    document.body.classList.add('presentation-mode');
 
     const header = element('header', 'presentation-header');
     const brand = element('a', 'brand', 'git / github');
@@ -562,6 +679,7 @@
     root.append(header, body, notes, footer, meter, status, reference);
 
     function render() {
+      root.dispatchEvent(new CustomEvent('oficina:tooltip-hide'));
       cleanups.forEach((cleanup) => cleanup());
       cleanups = [];
       main.replaceChildren();
@@ -569,11 +687,13 @@
       if (!slide) {
         main.append(element('h1', '', 'Nenhum slide disponível.'));
       } else {
+        const canvas = element('div', 'slide-content');
         const chapter = window.Oficina.agenda?.find((item) => item.id === slide.chapter);
-        main.append(element('p', 'eyebrow', chapter?.title || slide.chapter), element('h1', '', slide.title));
+        canvas.append(element('p', 'eyebrow', chapter?.title || slide.chapter), element('h1', '', slide.title));
         const content = element('div', 'slide-blocks');
         (slide.blocks || []).forEach((block) => content.append(renderBlock(block, cleanups)));
-        main.append(content);
+        canvas.append(content);
+        main.append(canvas);
         notes.replaceChildren(renderNotes(slide.notes || {}));
       }
       previous.disabled = index === 0;
@@ -585,6 +705,28 @@
       progress.textContent = `${deck.length ? index + 1 : 0} / ${deck.length}`;
       fill.style.width = `${deck.length ? ((index + 1) / deck.length) * 100 : 0}%`;
       document.title = slide ? `${slide.title} · Git e GitHub, na prática` : 'Git e GitHub, na prática';
+      scheduleFit();
+    }
+
+    function fitSlide() {
+      fitFrame = 0;
+      const canvas = main.querySelector('.slide-content');
+      if (!canvas || !main.clientHeight || !main.clientWidth) return;
+      canvas.style.zoom = '1';
+      const style = getComputedStyle(main);
+      const availableHeight = main.clientHeight - Number.parseFloat(style.paddingTop) - Number.parseFloat(style.paddingBottom);
+      const availableWidth = main.clientWidth - Number.parseFloat(style.paddingLeft) - Number.parseFloat(style.paddingRight);
+      const naturalBounds = canvas.getBoundingClientRect();
+      const heightScale = availableHeight / Math.max(naturalBounds.height, 1);
+      const widthScale = availableWidth / Math.max(naturalBounds.width, 1);
+      const scale = Math.max(.82, Math.min(1, heightScale, widthScale));
+      canvas.style.zoom = String(Math.round(scale * 1000) / 1000);
+      main.dataset.fit = scale.toFixed(3);
+    }
+
+    function scheduleFit() {
+      if (fitFrame) cancelAnimationFrame(fitFrame);
+      fitFrame = requestAnimationFrame(fitSlide);
     }
 
     function go(delta) {
@@ -611,6 +753,7 @@
       fullscreenButton.title = isFull ? 'Sair da tela cheia (F)' : 'Alternar tela cheia (F)';
       fullscreenButton.setAttribute('aria-pressed', String(isFull));
       root.classList.toggle('is-fullscreen', isFull);
+      scheduleFit();
     }
 
     async function fullscreen() {
@@ -682,6 +825,9 @@
     document.addEventListener('fullscreenchange', onFullscreenChange);
     document.addEventListener('webkitfullscreenchange', onFullscreenChange);
     window.addEventListener('hashchange', onHash);
+    window.addEventListener('resize', scheduleFit, { passive: true });
+    const contentObserver = new MutationObserver(scheduleFit);
+    contentObserver.observe(main, { childList: true, subtree: true, characterData: true });
     render();
     return {
       destroy() {
@@ -693,12 +839,16 @@
         document.removeEventListener('fullscreenchange', onFullscreenChange);
         document.removeEventListener('webkitfullscreenchange', onFullscreenChange);
         window.removeEventListener('hashchange', onHash);
+        window.removeEventListener('resize', scheduleFit);
+        contentObserver.disconnect();
+        if (fitFrame) cancelAnimationFrame(fitFrame);
         cleanupTooltip?.();
         cleanups.forEach((cleanup) => cleanup());
         cleanups = [];
+        document.body.classList.remove('presentation-mode');
       },
     };
   }
 
-  window.Oficina = { ...window.Oficina, registerWidget, mountPresentation, explainCommand, initCommandTooltip };
+  window.Oficina = { ...window.Oficina, registerWidget, mountPresentation, explainCommand, explainCommandParts, renderCommandLine, initCommandTooltip };
 }());
