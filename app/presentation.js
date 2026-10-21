@@ -90,7 +90,7 @@
   function shouldIgnoreKey(event) {
     return event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey ||
       event.target.isContentEditable || event.target.contentEditable === 'true' ||
-      event.target.closest?.('input, textarea, select, button, a, [contenteditable=""], [contenteditable="true"], [role="textbox"]') ||
+      event.target.closest?.('input, textarea, select, button, a, [tabindex="0"], [contenteditable=""], [contenteditable="true"], [role="textbox"]') ||
       !window.getSelection().isCollapsed;
   }
 
@@ -121,6 +121,22 @@
     const main = element('main', 'slide');
     main.id = 'slide-content';
     main.tabIndex = -1;
+    const chapters = element('nav', 'chapter-navigation');
+    chapters.setAttribute('aria-label', 'Capítulos da oficina');
+    chapters.append(element('p', 'eyebrow', 'Seu percurso'));
+    const chapterIds = [...new Set(deck.map((slide) => slide.chapter))];
+    const chapterLinks = chapterIds.map((id, chapterIndex) => {
+      const chapter = window.Oficina.agenda?.find((item) => item.id === id);
+      const firstSlide = deck.find((slide) => slide.chapter === id);
+      const link = element('a', 'chapter-link');
+      link.href = `#${encodeURIComponent(firstSlide.id)}`;
+      link.dataset.chapter = id;
+      link.append(element('span', 'chapter-number', String(chapterIndex + 1).padStart(2, '0')),
+        element('span', '', chapter?.title || id));
+      if (chapter) link.append(element('small', '', `${chapter.minutes} min`));
+      chapters.append(link);
+      return link;
+    });
     const skipLink = document.querySelector('a.skip-link[href="#slide-content"]');
     const notes = element('aside', 'instructor-notes');
     notes.id = 'instructor-notes';
@@ -153,7 +169,9 @@
     referenceContent.append(element('h2', '', 'Comandos sempre à mão'),
       element('p', '', 'Use git status para observar o repositório antes e depois de cada passo.'));
     reference.append(closeReference, referenceContent);
-    root.append(header, main, notes, footer, meter, status, reference);
+    const body = element('div', 'presentation-body');
+    body.append(chapters, main);
+    root.append(header, body, notes, footer, meter, status, reference);
 
     function render() {
       cleanups.forEach((cleanup) => cleanup());
@@ -163,13 +181,18 @@
       if (!slide) {
         main.append(element('h1', '', 'Nenhum slide disponível.'));
       } else {
-        main.append(element('p', 'eyebrow', slide.chapter), element('h1', '', slide.title));
+        const chapter = window.Oficina.agenda?.find((item) => item.id === slide.chapter);
+        main.append(element('p', 'eyebrow', chapter?.title || slide.chapter), element('h1', '', slide.title));
         const content = element('div', 'slide-blocks');
         (slide.blocks || []).forEach((block) => content.append(renderBlock(block, cleanups)));
         main.append(content);
         notes.replaceChildren(renderNotes(slide.notes || {}));
       }
       previous.disabled = index === 0;
+      chapterLinks.forEach((link) => {
+        if (link.dataset.chapter === slide?.chapter) link.setAttribute('aria-current', 'step');
+        else link.removeAttribute('aria-current');
+      });
       next.disabled = !deck.length || index === deck.length - 1;
       progress.textContent = `${deck.length ? index + 1 : 0} / ${deck.length}`;
       fill.style.width = `${deck.length ? ((index + 1) / deck.length) * 100 : 0}%`;

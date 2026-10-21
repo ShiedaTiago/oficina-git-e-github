@@ -8,6 +8,15 @@
 .control:hover:not(:disabled), .control[aria-expanded="true"] { background: var(--surface); border-color: var(--ink); }
 .slide { flex: 1; width: min(1160px, 91vw); margin: 0 auto; padding: clamp(2rem, 6vh, 4rem) 0 2.5rem; }
 .slide:focus { outline: none; }
+.presentation-body { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 4rem); flex: 1; margin: 0 4.5vw; }
+.presentation-body .slide { width: 100%; min-width: 0; }
+.chapter-navigation { padding-top: clamp(2rem, 6vh, 4rem); }
+.chapter-navigation > .eyebrow { font-size: .65rem; margin-bottom: 1rem; }
+.chapter-link { display: grid; grid-template-columns: 22px 1fr; gap: .15rem .5rem; padding: .65rem .5rem; border-radius: 6px; text-decoration: none; color: var(--muted); font-size: .8rem; line-height: 1.35; }
+.chapter-link small { grid-column: 2; font-size: .65rem; opacity: .8; }
+.chapter-number { font-family: Consolas, monospace; color: var(--accent); }
+.chapter-link[aria-current="step"] { background: var(--accent-soft); color: var(--ink); font-weight: 650; }
+.chapter-link:hover { background: var(--surface); }
 .slide > .eyebrow { margin-bottom: 1.4rem; }
 .slide h1 { font-size: clamp(2.4rem, 4.7vw, 4.7rem); letter-spacing: -.055em; max-width: 1050px; margin-bottom: 2rem; font-weight: 720; }
 .slide-blocks { max-width: 1050px; }
@@ -42,6 +51,12 @@
 .reference-content h2 { font-size: 2rem; letter-spacing: -.04em; }
 .widget { margin: 1.5rem 0; }
 @media (min-width: 1700px) { :root { font-size: 20px; } }
+@media (max-width: 1000px) {
+  .presentation-body { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .chapter-navigation { display: flex; gap: .3rem; overflow-x: auto; padding-top: 1rem; }
+  .chapter-navigation > .eyebrow { display: none; }
+  .chapter-link { min-width: 160px; }
+}
 @media (max-width: 650px) {
   .presentation-header { min-height: 116px; flex-wrap: wrap; gap: .5rem 1rem; padding: 1rem 0; }
   .brand { font-size: 1.2rem; }
@@ -61,7 +76,8 @@
   .reference-panel { inset: .6rem; width: auto; padding: 1rem; }
 }
 @media print {
-  .presentation-header, .presentation-footer, .progress-track, .status, .reference-panel, .skip-link { display: none; }
+  .presentation-header, .presentation-footer, .progress-track, .status, .reference-panel, .skip-link, .chapter-navigation { display: none; }
+  .presentation-body { display: block; margin: 0; }
   .presentation { min-height: 0; }
   .slide { width: 100%; }
 }
