@@ -29,7 +29,7 @@ beforeEach(async () => {
   vi.resetModules();
   window.getSelection().removeAllRanges();
   history.replaceState(null, '', '/');
-  document.body.innerHTML = '<div id="app"></div>';
+  document.body.innerHTML = '<a class="skip-link" href="#slide-content">Pular para o slide</a><div id="app"></div>';
   root = document.getElementById('app');
   delete window.Oficina;
   await load('app/navigation.js');
@@ -70,6 +70,25 @@ describe('presentation lifecycle and navigation', () => {
     history.replaceState(null, '', '#%ZZ');
     window.dispatchEvent(new HashChangeEvent('hashchange'));
     expect(root.querySelector('h1').textContent).toBe('Seu histórico começa aqui');
+  });
+  it('focuses the current slide from the skip link without replacing its fragment', () => {
+    mount(); press('ArrowRight');
+    const click = new MouseEvent('click', { bubbles: true, cancelable: true });
+    document.querySelector('.skip-link').dispatchEvent(click);
+    expect(click.defaultPrevented).toBe(true);
+    expect(document.activeElement).toBe(root.querySelector('main'));
+    expect(location.hash).toBe('#segundo');
+    expect(root.querySelector('h1').textContent).toBe('Um passo por vez');
+  });
+  it.each(['button', 'input'])('closes reference with Escape while a %s has focus', (tag) => {
+    mount();
+    const opener = root.querySelector('[data-action="reference"]');
+    opener.focus(); opener.click();
+    const reference = root.querySelector('[data-reference]');
+    const field = document.createElement(tag); reference.append(field); field.focus();
+    expect(press('Escape', field).defaultPrevented).toBe(true);
+    expect(reference.hidden).toBe(true);
+    expect(document.activeElement).toBe(opener);
   });
   it('toggles complete instructor notes with N', () => {
     mount(); press('n');

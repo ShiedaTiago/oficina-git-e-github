@@ -121,6 +121,7 @@
     const main = element('main', 'slide');
     main.id = 'slide-content';
     main.tabIndex = -1;
+    const skipLink = document.querySelector('a.skip-link[href="#slide-content"]');
     const notes = element('aside', 'instructor-notes');
     notes.id = 'instructor-notes';
     notes.dataset.notes = '';
@@ -221,12 +222,20 @@
       if (control && root.contains(control)) action(control.dataset.action);
     }
 
+    function focusContent(event) {
+      event.preventDefault();
+      main.focus();
+    }
+
     function onKey(event) {
-      if (shouldIgnoreKey(event)) return;
-      if (!reference.hidden) {
-        if (event.key === 'Escape') { event.preventDefault(); showReference(false); }
+      if (!reference.hidden && event.key === 'Escape' && !event.defaultPrevented &&
+          !event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
+        event.preventDefault();
+        showReference(false);
         return;
       }
+      if (shouldIgnoreKey(event)) return;
+      if (!reference.hidden) return;
       const actions = { ArrowRight: 'next', ArrowLeft: 'previous', n: 'notes', N: 'notes', f: 'fullscreen', F: 'fullscreen', '/': 'reference' };
       const name = actions[event.key];
       if (name) { event.preventDefault(); action(name); }
@@ -238,6 +247,7 @@
     }
 
     root.addEventListener('click', onClick);
+    skipLink?.addEventListener('click', focusContent);
     document.addEventListener('keydown', onKey);
     window.addEventListener('hashchange', onHash);
     render();
@@ -246,6 +256,7 @@
         if (destroyed) return;
         destroyed = true;
         root.removeEventListener('click', onClick);
+        skipLink?.removeEventListener('click', focusContent);
         document.removeEventListener('keydown', onKey);
         window.removeEventListener('hashchange', onHash);
         cleanups.forEach((cleanup) => cleanup());
