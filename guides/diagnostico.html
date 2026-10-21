@@ -25,22 +25,22 @@
     <section id="git-ausente">
       <h2>“git: command not found” ou “git não é reconhecido”</h2>
       <p>O terminal não encontrou o programa. No Windows, abra <strong>Git Bash</strong> pelo menu Iniciar; se acabou de instalar, feche o terminal e abra novamente. No Linux, confira a instalação da sua distribuição no <a href="preparacao.html#linux">guia de preparação</a>. No Windows, volte à <a href="preparacao.html#windows">instalação do Git for Windows</a>.</p>
-      <pre tabindex="0" aria-label="Verificar se Git está disponível"><code>git --version</code></pre>
+      <pre tabindex="0" aria-label="Verificar se Git está disponível"><code><span class="cmd-line" data-cmd-hint="Verifica a versão do Git instalada no sistema." title="Verifica a versão do Git instalada no sistema." tabindex="0">git --version</span></code></pre>
       <p>Sem permissão de instalação, peça ajuda à administração. Não baixe executáveis de sites de correção de erros.</p>
     </section>
     <section id="pasta">
       <h2>“not a git repository” ou arquivos inesperados</h2>
-      <pre tabindex="0" aria-label="Conferir pasta atual"><code>pwd
-ls
-git status</code></pre>
+      <pre tabindex="0" aria-label="Conferir pasta atual"><code><span class="cmd-line" data-cmd-hint="Mostra o caminho da pasta em que você está no momento (diretório atual)." title="Mostra o caminho da pasta em que você está no momento (diretório atual)." tabindex="0">pwd</span>
+<span class="cmd-line" data-cmd-hint="Lista os arquivos e pastas existentes no diretório atual." title="Lista os arquivos e pastas existentes no diretório atual." tabindex="0">ls</span>
+<span class="cmd-line" data-cmd-hint="Exibe o estado dos arquivos modificados, preparados e não rastreados." title="Exibe o estado dos arquivos modificados, preparados e não rastreados." tabindex="0">git status</span></code></pre>
       <p>Confirme que está na cópia de <code>site-da-turma</code>, e não na pasta pessoal, no pacote da apresentação ou em outra cópia do projeto. Use <code>cd ~/oficina-git/site-da-turma</code> se seguiu a preparação.</p>
       <p>Se o exercício local ainda não executou <code>git init</code>, esse erro é esperado. Execute a inicialização somente quando o roteiro pedir, dentro da cópia correta. Um repositório obtido com <code>git clone</code> já vem inicializado. Não apague a pasta <code>.git</code> para tentar corrigir um problema.</p>
     </section>
     <section id="identidade">
       <h2>“Author identity unknown”</h2>
       <p>Dentro do repositório, consulte a identidade efetiva:</p>
-      <pre tabindex="0" aria-label="Conferir autoria dos commits"><code>git config user.name
-git config user.email</code></pre>
+      <pre tabindex="0" aria-label="Conferir autoria dos commits"><code><span class="cmd-line" data-cmd-hint="Consulta o nome de autoria no repositório atual." title="Consulta o nome de autoria no repositório atual." tabindex="0">git config user.name</span>
+<span class="cmd-line" data-cmd-hint="Consulta o e-mail de autoria no repositório atual." title="Consulta o e-mail de autoria no repositório atual." tabindex="0">git config user.email</span></code></pre>
       <p>Se estiver vazia, siga a <a href="preparacao.html#identidade">configuração de identidade</a> e tente novamente o commit. O exemplo Ana Exemplo é fictício. Use seu endereço verificado ou o <code>noreply</code> copiado da sua conta. Nome/e-mail não resolvem problemas de login.</p>
     </section>
     <section id="autenticacao">
@@ -62,10 +62,10 @@ git config user.email</code></pre>
       <h2>Push rejeitado: “non-fast-forward” ou “fetch first”</h2>
       <p>A dupla pode ter enviado commits que sua cópia ainda não tem. Combine quem está editando, confira a branch com <code>git branch --show-current</code> e execute <code>git status</code>. Se houver alterações locais, conclua e registre sua etapa antes de integrar; se não souber o que registrar, peça ajuda.</p>
       <p>Com a árvore de trabalho limpa, e <strong>na branch compartilhada da atividade</strong>, busque e integre o remoto. O exemplo usa <code>main</code>; substitua pelo nome combinado se for outro:</p>
-      <pre tabindex="0" aria-label="Integrar histórico da branch compartilhada"><code>git fetch origin
-git log --oneline --graph --all -8
-git merge origin/main
-git status</code></pre>
+      <pre tabindex="0" aria-label="Integrar histórico da branch compartilhada"><code><span class="cmd-line" data-cmd-hint="Busca os commits do repositório remoto sem alterar seus arquivos de trabalho." title="Busca os commits do repositório remoto sem alterar seus arquivos de trabalho." tabindex="0">git fetch origin</span>
+<span class="cmd-line" data-cmd-hint="Exibe até 8 commits com um grafo visual de todas as branches." title="Exibe até 8 commits com um grafo visual de todas as branches." tabindex="0">git log --oneline --graph --all -8</span>
+<span class="cmd-line" data-cmd-hint="Integra as alterações da branch remota origin/main na branch atual." title="Integra as alterações da branch remota origin/main na branch atual." tabindex="0">git merge origin/main</span>
+<span class="cmd-line" data-cmd-hint="Exibe o estado dos arquivos modificados, preparados e não rastreados." title="Exibe o estado dos arquivos modificados, preparados e não rastreados." tabindex="0">git status</span></code></pre>
       <p>Se o merge abrir um editor para a mensagem do commit, salve e feche para concluir. Se aparecer conflito, use a próxima seção. Depois de conferir o resultado e concluir a integração, tente <code>git push origin main</code> novamente. Fonte: <a href="https://docs.github.com/en/get-started/using-git/dealing-with-non-fast-forward-errors">push rejeitado por histórico divergente</a>.</p>
       <p>“Permission denied”, “protected branch” e regras de revisão são outros problemas: confira conta, convite e fluxo de pull request com a dupla. Não tente sobrescrever o histórico remoto.</p>
     </section>

@@ -19,15 +19,137 @@ it('opens search with focus, safely filters HTML, closes on Escape and restores 
   trigger.click(); expect(document.activeElement).toBe(search);
   ref.destroy(); deck.destroy();
 });
+it('filters rendered commands by name, purpose, example, option, caution and keyword', () => {
+  const host = root(); const api = window.Oficina;
+  const commands = [
+    {name:'git status', purpose:'Consultar o estado do repositório', example:'git status --short', caution:'Leia a saída antes de continuar.', keywords:['diagnóstico']},
+    {name:'git diff', purpose:'Comparar alterações', example:'git diff --staged', caution:'Revise o snapshot preparado.', keywords:['área de preparação']},
+  ];
+  const ref = api.mountReference(host, commands);
+  const search = host.querySelector('input[type="search"]');
+  const expectOnly = (query, expected) => {
+    search.value = query; search.dispatchEvent(new Event('input'));
+    expect(host.querySelectorAll('.command-card')).toHaveLength(1);
+    expect(host.querySelector('.command-card h3').textContent).toBe(expected);
+  };
+
+  expectOnly('STATUS', 'git status');
+  expectOnly('estado do repositorio', 'git status');
+  expectOnly('--staged', 'git diff');
+  expectOnly('snapshot', 'git diff');
+  expectOnly('preparacao', 'git diff');
+  ref.destroy();
+});
+it('supports interactive category chips and renders rich card layout', () => {
+  const host = root(); const api = window.Oficina;
+  const commands = [
+    {
+      id: 'pwd',
+      name: 'pwd',
+      category: 'configuracao',
+      purpose: 'Exibir caminho atual',
+      example: 'pwd',
+      caution: 'Confira antes de commitar',
+      keywords: ['pasta'],
+      url: 'https://git-scm.com/docs/git'
+    },
+    {
+      id: 'branch',
+      name: 'git branch',
+      category: 'branches',
+      purpose: 'Listar ramificações',
+      example: 'git branch',
+      caution: 'Asterisco marca atual',
+      keywords: ['ramificação'],
+      url: 'https://git-scm.com/docs/git-branch'
+    },
+    {
+      id: 'restore',
+      name: 'git restore',
+      category: 'recuperacao',
+      purpose: 'Descartar alterações',
+      example: 'git restore index.html',
+      caution: 'Ação irreversível',
+      keywords: ['descartar'],
+      url: 'https://git-scm.com/docs/git-restore'
+    }
+  ];
+
+  const ref = api.mountReference(host, commands);
+
+  expect(host.querySelector('#git-command-reference-title').textContent).toBe('Comandos Git e GitHub');
+  expect(host.querySelectorAll('.category-filter-btn').length).toBeGreaterThanOrEqual(7);
+
+  const branchesBtn = host.querySelector('[data-category="branches"]');
+  expect(branchesBtn.getAttribute('aria-pressed')).toBe('false');
+
+  branchesBtn.click();
+  expect(branchesBtn.getAttribute('aria-pressed')).toBe('true');
+  expect(host.querySelectorAll('.command-card')).toHaveLength(1);
+  expect(host.querySelector('.command-card h3').textContent).toBe('git branch');
+
+  const card = host.querySelector('.command-card');
+  expect(card.querySelector('.command-category').textContent).toBe('Branches');
+  expect(card.querySelector('p').textContent).toBe('Listar ramificações');
+  expect(card.querySelector('pre').textContent).toBe('git branch');
+  expect(card.querySelector('.command-observation').textContent).toBe('Asterisco marca atual');
+  expect(card.querySelector('a').getAttribute('target')).toBe('_blank');
+  expect(card.querySelector('a').getAttribute('rel')).toBe('noopener');
+  expect(card.querySelector('[data-copy-command]').dataset.copyCommand).toBe('git branch');
+
+  // Test search within category
+  const search = host.querySelector('input[type="search"]');
+  search.value = 'inexistente';
+  search.dispatchEvent(new Event('input'));
+  expect(host.querySelectorAll('.command-card')).toHaveLength(0);
+  expect(host.textContent).toContain('Nenhum comando encontrado.');
+
+  // Reset to "Todos"
+  const allBtn = host.querySelector('[data-category="todas"]');
+  allBtn.click();
+  search.value = '';
+  search.dispatchEvent(new Event('input'));
+  expect(host.querySelectorAll('.command-card')).toHaveLength(3);
+
+  ref.destroy();
+  expect(host.children.length).toBe(0);
+});
+it('renders multiline command examples with individual cmd-line spans and specific hints', () => {
+  const host = root();
+  const api = window.Oficina;
+  const commands = [
+    {
+      name: 'git branch',
+      purpose: 'Gerenciar branches',
+      example: 'git branch\ngit branch -a',
+      caution: 'Use com cuidado.',
+      category: 'branches',
+      keywords: ['branch']
+    }
+  ];
+  const ref = api.mountReference(host, commands);
+  const card = host.querySelector('.command-card');
+  const pre = card.querySelector('pre');
+  expect(pre.textContent).toBe('git branch\ngit branch -a');
+
+  const cmdLines = pre.querySelectorAll('.cmd-line');
+  expect(cmdLines).toHaveLength(2);
+  expect(cmdLines[0].textContent).toBe('git branch');
+  expect(cmdLines[0].dataset.cmdHint).toContain('Lista as branches locais');
+  expect(cmdLines[1].textContent).toBe('git branch -a');
+  expect(cmdLines[1].dataset.cmdHint).toContain('Lista todas as branches locais e remotas');
+
+  ref.destroy();
+});
 it('renders manual fallback after clipboard rejection and only reports success after fulfillment', async () => {
   const host = root(); const api = window.Oficina;
   const ref = api.mountReference(host, api.commands.slice(0,1));
   const copy = api.attachClipboard(host, {writeText: vi.fn().mockRejectedValue(new Error())});
-  host.querySelector('button').click(); await vi.waitFor(() => expect(host.querySelector('textarea')).not.toBeNull());
+  host.querySelector('[data-copy-command]').click(); await vi.waitFor(() => expect(host.querySelector('textarea')).not.toBeNull());
   expect(host.querySelector('textarea').value).toBe(api.commands[0].example);
   expect(host.textContent).not.toContain('Comando copiado.'); copy.destroy();
   let resolve; const success = api.attachClipboard(host, {writeText: () => new Promise(done => {resolve = done;})});
-  host.querySelector('button').click(); expect(host.textContent).not.toContain('Comando copiado.');
+  host.querySelector('[data-copy-command]').click(); expect(host.textContent).not.toContain('Comando copiado.');
   resolve(); await vi.waitFor(() => expect(host.textContent).toContain('Comando copiado.'));
   success.destroy(); ref.destroy();
 });

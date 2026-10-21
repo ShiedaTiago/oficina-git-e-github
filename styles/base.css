@@ -31,6 +31,47 @@ pre { overflow-x: auto; white-space: pre; }
 .eyebrow { color: var(--accent); font-size: .8rem; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; }
 .skip-link { position: fixed; top: .5rem; left: 1rem; padding: .6rem 1rem; background: var(--surface); z-index: 20; transform: translateY(-160%); }
 .skip-link:focus { transform: translateY(0); }
+.cmd-line {
+  position: relative;
+  display: block;
+  cursor: help;
+  border-radius: 4px;
+  padding: 0.05rem 0.25rem;
+  transition: background-color 0.15s ease;
+}
+.cmd-line:hover,
+.cmd-line:focus-visible {
+  background-color: rgba(255, 255, 255, 0.12);
+  outline: none;
+}
+:not(pre) > .cmd-line:hover,
+:not(pre) > .cmd-line:focus-visible {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+.cmd-tooltip {
+  position: fixed;
+  z-index: 1000;
+  background: #1a201c;
+  color: #f6f4e9;
+  border: 1px solid #4a5048;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  padding: 0.45rem 0.75rem;
+  pointer-events: none;
+  max-width: min(420px, calc(100vw - 2rem));
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  white-space: normal;
+  word-break: normal;
+}
+.cmd-tooltip.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; }
+  .cmd-line, .cmd-tooltip { transition: none !important; }
 }

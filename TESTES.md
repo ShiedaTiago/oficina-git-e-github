@@ -67,9 +67,9 @@ Os resultados ficam em `dist/oficina-git-github` e `dist/oficina-git-github.zip`
 
 Verificação executada em 21/10/2026 no Windows (`win32`), com Node.js 24.15.0, npm 11.12.1, Git 2.54.0 e Chromium do Playwright:
 
-- testes unitários e de integração: 77 aprovados;
-- cobertura: 98,14% de statements, 90,34% de branches, 99,14% de funções e 99,82% de linhas;
-- testes E2E: 8 aprovados nos perfis desktop, mobile e offline;
+- testes unitários e de integração: 92 aprovados;
+- cobertura: 97,75% de statements, 88,39% de branches, 99,17% de funções e 99,70% de linhas;
+- testes E2E: 17 aprovados nos perfis desktop, mobile e offline;
 - verificador Git: aprovado para snapshot, staging, revert, branches, conflito, merge e sincronização com remoto local;
 - empacotamento: pasta e ZIP com 33 arquivos públicos, conteúdo idêntico e ZIP reproduzível;
 - auditoria de dependências: nenhuma vulnerabilidade conhecida encontrada.

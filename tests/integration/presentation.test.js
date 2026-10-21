@@ -53,6 +53,20 @@ describe('presentation lifecycle and navigation', () => {
     expect(root.querySelector('[data-action="previous"]').disabled).toBe(true);
     expect(root.querySelector('[data-widget="staging"]')).not.toBeNull();
   });
+  it('exposes the Comandos Git tab as an accessible controlled toggle', () => {
+    mount();
+    const trigger = root.querySelector('[data-action="reference"]');
+    const panelId = trigger.getAttribute('aria-controls');
+
+    expect(trigger.textContent).toBe('Comandos Git');
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    expect(panelId).toBeTruthy();
+    expect(root.querySelector(`#${panelId}`)).toBe(root.querySelector('[data-reference]'));
+
+    trigger.click();
+    expect(trigger.getAttribute('aria-expanded')).toBe('true');
+    expect(root.querySelector('[data-reference]').hidden).toBe(false);
+  });
   it('navigates with buttons, announces progress and preserves stable hashes', () => {
     mount();
     root.querySelector('[data-action="next"]').click();
@@ -182,14 +196,75 @@ describe('presentation lifecycle and navigation', () => {
     root.requestFullscreen = async () => {};
     document.exitFullscreen = async () => {};
     mount();
+    const fsBtn = root.querySelector('[data-action="fullscreen"]');
+    expect(fsBtn.textContent).toBe('Tela cheia');
+    expect(fsBtn.getAttribute('aria-pressed')).toBe('false');
+
     press('f'); await Promise.resolve();
     expect(root.querySelector('[data-status]').textContent).toBe('');
     Object.defineProperty(document, 'fullscreenElement', { configurable: true, value: root });
-    press('f'); await Promise.resolve();
+    document.dispatchEvent(new Event('fullscreenchange'));
+    expect(fsBtn.textContent).toBe('Sair da tela cheia');
+    expect(fsBtn.getAttribute('aria-pressed')).toBe('true');
+    expect(root.classList.contains('is-fullscreen')).toBe(true);
+
     Object.defineProperty(document, 'fullscreenElement', { configurable: true, value: null });
+    document.dispatchEvent(new Event('fullscreenchange'));
+    expect(fsBtn.textContent).toBe('Tela cheia');
+    expect(fsBtn.getAttribute('aria-pressed')).toBe('false');
+    expect(root.classList.contains('is-fullscreen')).toBe(false);
+
+    press('f'); await Promise.resolve();
     root.querySelector('[data-action="reference"]').click();
     press('ArrowRight'); expect(root.querySelector('h1').textContent).toBe('Seu histórico começa aqui');
     root.querySelector('[data-action="close-reference"]').click();
     expect(root.querySelector('[data-reference]').hidden).toBe(true);
+  });
+  it('annotates code lines with cmd-line and triggers the floating tooltip on mouseover and focus', () => {
+    mount();
+    const code = root.querySelector('code');
+    expect(code.textContent).toBe('git status');
+    const cmdLine = code.querySelector('.cmd-line');
+    expect(cmdLine).not.toBeNull();
+    expect(cmdLine.textContent).toBe('git status');
+    expect(cmdLine.dataset.cmdHint).toContain('Exibe o estado dos arquivos');
+    expect(cmdLine.tabIndex).toBe(0);
+
+    const tooltip = document.getElementById('cmd-tooltip');
+    expect(tooltip).not.toBeNull();
+    expect(tooltip.classList.contains('is-visible')).toBe(false);
+
+    // Mouseover shows tooltip
+    cmdLine.dispatchEvent(new MouseEvent('mouseover', { bubbles: true }));
+    expect(tooltip.classList.contains('is-visible')).toBe(true);
+    expect(tooltip.textContent).toBe(cmdLine.dataset.cmdHint);
+
+    // Mouseout hides tooltip
+    cmdLine.dispatchEvent(new MouseEvent('mouseout', { bubbles: true }));
+    expect(tooltip.classList.contains('is-visible')).toBe(false);
+
+    // Focusin shows tooltip
+    cmdLine.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    expect(tooltip.classList.contains('is-visible')).toBe(true);
+
+    // Focusout hides tooltip
+    cmdLine.dispatchEvent(new FocusEvent('focusout', { bubbles: true }));
+    expect(tooltip.classList.contains('is-visible')).toBe(false);
+  });
+  it('keeps footer navigation buttons anchored and progress stably formatted', () => {
+    mount();
+    const footer = root.querySelector('.presentation-footer');
+    expect(footer).not.toBeNull();
+    const progress = footer.querySelector('.progress');
+    const prev = footer.querySelector('[data-action="previous"]');
+    const next = footer.querySelector('[data-action="next"]');
+    expect(progress.textContent).toBe('1 / 2');
+    expect(prev.disabled).toBe(true);
+    expect(next.disabled).toBe(false);
+
+    next.click();
+    expect(progress.textContent).toBe('2 / 2');
+    expect(prev.disabled).toBe(false);
+    expect(next.disabled).toBe(true);
   });
 });

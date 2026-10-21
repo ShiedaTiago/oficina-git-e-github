@@ -29,29 +29,29 @@
         <li>Execute o instalador. Mantenha Git Bash e Git Credential Manager disponíveis. Se houver escolha de editor, use um que você conheça; o Visual Studio Code é uma opção se já estiver instalado.</li>
         <li>Abra <strong>Git Bash</strong> pelo menu Iniciar. Esse será o terminal usado na oficina; os comandos compartilhados funcionam nele.</li>
       </ol>
-      <pre tabindex="0" aria-label="Verificar a instalação"><code>git --version</code></pre>
+      <pre tabindex="0" aria-label="Verificar a instalação"><code><span class="cmd-line" data-cmd-hint="Verifica a versão do Git instalada no sistema." title="Verifica a versão do Git instalada no sistema." tabindex="0">git --version</span></code></pre>
       <p>Resultado esperado: uma linha como <code>git version 2.x.y.windows.z</code>. Use Git 2.28 ou superior; o restante do número pode variar. Se o comando não existir, feche e reabra o Git Bash; veja o <a href="diagnostico.html#git-ausente">diagnóstico de instalação</a>.</p>
     </section>
     <section id="linux">
       <h2>1. Linux: use o terminal da distribuição</h2>
       <p>Abra o aplicativo Terminal. Escolha apenas o grupo correspondente à sua distribuição. Os comandos de instalação precisam de internet e permissão de administrador; <code>sudo</code> pode pedir a senha do computador, sem mostrar caracteres enquanto você digita. Em uma máquina administrada, peça a instalação à equipe responsável.</p>
       <h3>Debian / Ubuntu / Mint</h3>
-      <pre tabindex="0" aria-label="Instalar Git com apt"><code>sudo apt update
-sudo apt install git</code></pre>
+      <pre tabindex="0" aria-label="Instalar Git com apt"><code><span class="cmd-line" data-cmd-hint="Atualiza a lista de pacotes no terminal Linux (Debian/Ubuntu/Mint)." title="Atualiza a lista de pacotes no terminal Linux (Debian/Ubuntu/Mint)." tabindex="0">sudo apt update</span>
+<span class="cmd-line" data-cmd-hint="Instala o Git pelo gerenciador de pacotes apt." title="Instala o Git pelo gerenciador de pacotes apt." tabindex="0">sudo apt install git</span></code></pre>
       <h3>Fedora</h3>
-      <pre tabindex="0" aria-label="Instalar Git com dnf"><code>sudo dnf install git</code></pre>
+      <pre tabindex="0" aria-label="Instalar Git com dnf"><code><span class="cmd-line" data-cmd-hint="Instala o Git pelo gerenciador de pacotes dnf no Fedora." title="Instala o Git pelo gerenciador de pacotes dnf no Fedora." tabindex="0">sudo dnf install git</span></code></pre>
       <p>Depois, em qualquer uma delas:</p>
-      <pre tabindex="0" aria-label="Verificar o Git no Linux"><code>git --version</code></pre>
+      <pre tabindex="0" aria-label="Verificar o Git no Linux"><code><span class="cmd-line" data-cmd-hint="Verifica a versão do Git instalada no sistema." title="Verifica a versão do Git instalada no sistema." tabindex="0">git --version</span></code></pre>
       <p>Espere uma linha como <code>git version 2.x.y</code>. Consulte a <a href="https://git-scm.com/install/linux">instalação oficial por distribuição</a> para outros sistemas. Use Git 2.28 ou superior para os comandos da oficina, incluindo git init -b. Não é preciso ter a versão mais recente; se a distribuição fornecer uma versão anterior, peça ajuda para atualizar.</p>
     </section>
     <section id="pasta">
       <h2>2. Saiba em qual pasta você está</h2>
       <p>Use Git Bash no Windows e Terminal no Linux. Não digite os símbolos de prompt, como <code>$</code>, nem as linhas de resultado. As aspas fazem parte do comando quando o caminho tem espaços.</p>
-      <pre tabindex="0" aria-label="Criar pasta da oficina"><code>pwd
-ls
-mkdir -p ~/oficina-git
-cd ~/oficina-git
-pwd</code></pre>
+      <pre tabindex="0" aria-label="Criar pasta da oficina"><code><span class="cmd-line" data-cmd-hint="Mostra o caminho da pasta em que você está no momento (diretório atual)." title="Mostra o caminho da pasta em que você está no momento (diretório atual)." tabindex="0">pwd</span>
+<span class="cmd-line" data-cmd-hint="Lista os arquivos e pastas existentes no diretório atual." title="Lista os arquivos e pastas existentes no diretório atual." tabindex="0">ls</span>
+<span class="cmd-line" data-cmd-hint="Cria uma nova pasta no computador (incluindo subpastas se necessário)." title="Cria uma nova pasta no computador (incluindo subpastas se necessário)." tabindex="0">mkdir -p ~/oficina-git</span>
+<span class="cmd-line" data-cmd-hint="Muda para a pasta especificada." title="Muda para a pasta especificada." tabindex="0">cd ~/oficina-git</span>
+<span class="cmd-line" data-cmd-hint="Mostra o caminho da pasta em que você está no momento (diretório atual)." title="Mostra o caminho da pasta em que você está no momento (diretório atual)." tabindex="0">pwd</span></code></pre>
       <p><code>pwd</code> mostra sua localização; <code>ls</code> lista arquivos; <code>cd</code> troca de pasta. <code>~</code> representa sua pasta pessoal. No Git Bash, <code>C:\Users\Ana</code> aparece como <code>/c/Users/Ana</code>. Para uma pasta com espaço, use, por exemplo, <code>cd "/c/Users/Ana/Minha pasta"</code>.</p>
       <p>Extraia o pacote da oficina e localize <code>examples/site-da-turma</code>. Faça uma cópia dessa pasta para <code>~/oficina-git/site-da-turma</code>. Não inicialize Git na sua pasta pessoal inteira. O exercício explicará quando executar <code>git init</code> na cópia.</p>
       <p>Em um editor de texto, confirme que consegue abrir e salvar <code>index.html</code>. Mantenha a extensão <code>.html</code>, sem acrescentar <code>.txt</code>.</p>
@@ -59,11 +59,11 @@ pwd</code></pre>
     <section id="identidade">
       <h2>3. Configure a autoria dos commits</h2>
       <p>O nome e o e-mail ficam registrados nos commits. Eles não são senha nem login. Primeiro, confira o que já existe:</p>
-      <pre tabindex="0" aria-label="Consultar identidade atual"><code>git config --global user.name
-git config --global user.email</code></pre>
+      <pre tabindex="0" aria-label="Consultar identidade atual"><code><span class="cmd-line" data-cmd-hint="Consulta o nome de autoria configurado globalmente." title="Consulta o nome de autoria configurado globalmente." tabindex="0">git config --global user.name</span>
+<span class="cmd-line" data-cmd-hint="Consulta o e-mail de autoria configurado globalmente." title="Consulta o e-mail de autoria configurado globalmente." tabindex="0">git config --global user.email</span></code></pre>
       <p>Se estiver vazio ou incorreto, substitua os exemplos abaixo pela identidade que você quer registrar. <strong>Ana Exemplo e o endereço abaixo são fictícios.</strong> <code>--global</code> aplica a configuração aos seus repositórios nesse usuário do computador.</p>
-      <pre tabindex="0" aria-label="Exemplo de configuração de identidade"><code>git config --global user.name "Ana Exemplo"
-git config --global user.email "ana@example.com"</code></pre>
+      <pre tabindex="0" aria-label="Exemplo de configuração de identidade"><code><span class="cmd-line" data-cmd-hint="Define o nome de autoria exibido nos commits deste computador." title="Define o nome de autoria exibido nos commits deste computador." tabindex="0">git config --global user.name "Ana Exemplo"</span>
+<span class="cmd-line" data-cmd-hint="Define o e-mail de autoria exibido nos commits deste computador." title="Define o e-mail de autoria exibido nos commits deste computador." tabindex="0">git config --global user.email "ana@example.com"</span></code></pre>
       <p>Para preservar seu e-mail pessoal, abra GitHub → foto do perfil → <strong>Settings → Emails</strong>, ative <strong>Keep my email addresses private</strong> e copie o endereço <code>noreply</code> exibido na sua conta. Use esse endereço exato em <code>user.email</code>; não invente um. Alterar a configuração afeta commits futuros. Fonte: <a href="https://docs.github.com/en/account-and-profile/how-tos/email-preferences/setting-your-commit-email-address">e-mail de commits no GitHub</a>.</p>
       <p>Confira de novo com os dois comandos de consulta. Em computador compartilhado ou para manter outra identidade de trabalho, configure somente a cópia do exercício depois de <code>git init</code>: execute os mesmos comandos sem <code>--global</code>, dentro do repositório.</p>
     </section>
@@ -77,8 +77,8 @@ git config --global user.email "ana@example.com"</code></pre>
         <li><strong>Windows:</strong> use o Git Credential Manager incluído no Git for Windows. Ao fazer uma operação HTTPS que exige acesso, siga a janela do navegador e confirme a conta correta e o segundo fator, se solicitado.</li>
         <li><strong>Linux:</strong> instale o GitHub CLI seguindo o <a href="https://github.com/cli/cli#installation">guia oficial para a distribuição</a>. <code>gh</code> é um programa separado do Git. No terminal, execute o comando abaixo, escolha <strong>GitHub.com → HTTPS → autenticar Git: Yes → navegador</strong> e siga as instruções. O <a href="https://cli.github.com/manual/gh_auth_login">manual de gh auth login</a> explica o fluxo.</li>
       </ul>
-      <pre tabindex="0" aria-label="Login com GitHub CLI quando estiver instalado"><code>gh auth login
-gh auth status</code></pre>
+      <pre tabindex="0" aria-label="Login com GitHub CLI quando estiver instalado"><code><span class="cmd-line" data-cmd-hint="Inicia a autenticação segura da sua conta GitHub pelo terminal." title="Inicia a autenticação segura da sua conta GitHub pelo terminal." tabindex="0">gh auth login</span>
+<span class="cmd-line" data-cmd-hint="Verifica o status da conexão e conta autenticada no GitHub." title="Verifica o status da conexão e conta autenticada no GitHub." tabindex="0">gh auth status</span></code></pre>
       <p>No Linux, GCM também é alternativa, mas requer <a href="https://github.com/git-ecosystem/git-credential-manager/blob/release/docs/linuxcredstores.md">configuração de um armazenamento seguro</a>. O GitHub CLI pode recorrer a um arquivo de texto se não houver armazenamento seguro disponível; confira o aviso do programa e peça ajuda em máquinas compartilhadas. Use uma sessão pessoal com armazenamento seguro.</p>
       <p>Nunca coloque senha, token ou código de confirmação no HTML, README, URL do remoto ou commit. Não compartilhe a tela de credenciais. Se aparecer um pedido de senha no terminal, não tente a senha da conta: volte ao fluxo do gerenciador ou peça ajuda. Fonte: <a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github">autenticação no GitHub</a>.</p>
     </section>

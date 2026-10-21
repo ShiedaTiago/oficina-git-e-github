@@ -28,7 +28,9 @@ No **Linux**, abra `index.html` pelo gerenciador de arquivos. Pelo terminal, exe
 xdg-open ./index.html
 ```
 
-Use `←` e `→` para mudar de slide, `N` para mostrar as notas de aula, `/` para abrir a referência de comandos e `F` para alternar a tela cheia.
+Use `←` e `→` para mudar de slide, `N` para mostrar as notas de aula, `/` para abrir a aba **Comandos Git** e `F` para alternar a tela cheia. A aba permite pesquisar, sem diferença entre maiúsculas, minúsculas ou acentos, todos os comandos e variantes usados na oficina. O catálogo e seus exemplos funcionam offline; os links para os manuais oficiais exigem conexão apenas quando forem abertos.
+
+Ao passar o mouse ou focar com o teclado em qualquer linha de comando nos slides, na pesquisa ou nos guias, um balão explicativo flutuante apresenta a finalidade detalhada daquela instrução específica. A navegação mantém os botões "Anterior" e "Próximo" ancorados e estáveis em tela normal e em tela cheia.
 
 ## Desenvolvimento
 

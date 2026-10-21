@@ -100,3 +100,20 @@ test('abre produto, guia e exemplo sem acesso à rede', async ({ page, context }
   await expect(page.locator('#mensagem')).toHaveText('Aprendemos Git em conjunto.');
   expect(networkRequests).toEqual([]);
 });
+
+test('consulta comandos pelo clique enquanto o pacote está offline', async ({ page, context }) => {
+  const networkRequests = [];
+  page.on('request', (request) => {
+    if (/^https?:/.test(request.url())) networkRequests.push(request.url());
+  });
+  await context.setOffline(true);
+  await page.goto(pathToFileURL(resolve(packageRoot, 'index.html')).href);
+
+  const trigger = page.getByRole('button', { name: 'Comandos Git' });
+  await trigger.click();
+  const search = page.getByRole('searchbox');
+  await expect(search).toBeFocused();
+  await search.fill('remote get-url');
+  await expect(page.locator('.command-card')).toContainText('git remote get-url origin');
+  expect(networkRequests).toEqual([]);
+});

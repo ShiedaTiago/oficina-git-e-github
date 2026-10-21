@@ -11,13 +11,16 @@ Consulta em **20 de outubro de 2026**. As explicações e diagramas da oficina s
 | [git-config](https://git-scm.com/docs/git-config) | `user.name`, `user.email` e escopo global; autoria não é autenticação. |
 | [git-init](https://git-scm.com/docs/git-init) | `-b main` escolhe a branch inicial (disponível desde 2.28). |
 | [git-add](https://git-scm.com/docs/git-add) | Captura conteúdo no index/staging naquele momento; nova edição requer novo add para entrar no snapshot preparado. |
+| [git-status](https://git-scm.com/docs/git-status) e [git-check-ignore](https://git-scm.com/docs/git-check-ignore) | Estado completo/resumido e conferência de caminhos alcançados pelas regras de ignore. |
 | [git-diff](https://git-scm.com/docs/git-diff) | Comparação trabalho/index; `--staged` compara index/HEAD. |
 | [git-commit](https://git-scm.com/docs/git-commit) e [git-log](https://git-scm.com/docs/git-log) | Registro preparado, mensagem `-m`, leitura `--oneline --graph --all`. |
 | [git-restore](https://git-scm.com/docs/git-restore) | `--staged` atua apenas no index e usa HEAD por padrão; sem opção atua no trabalho e pode descartar edições. A prática pressupõe HEAD existente. |
 | [git-revert](https://git-scm.com/docs/git-revert) | Registra um novo commit inverso, preservando o histórico. Usar trabalho limpo; exemplo restrito ao último commit simples. |
 | [git-switch](https://git-scm.com/docs/git-switch) | `-c` cria e seleciona uma branch; alternância pode ser impedida para proteger mudanças. |
+| [git-branch](https://git-scm.com/docs/git-branch) | Listagem de branches e `--show-current` para conferir a branch atual. |
 | [git-merge](https://git-scm.com/docs/git-merge) | Fast-forward, merge com dois pais, marcadores de conflito e `--abort`; iniciar com trabalho limpo. |
 | [git-clone](https://git-scm.com/docs/git-clone) | Nova cópia em uma nova pasta; não é atualização da pasta atual. |
+| [git-remote](https://git-scm.com/docs/git-remote) | Cadastro, listagem e consulta de URL do remoto com `add`, `-v` e `get-url`. |
 | [git-fetch](https://git-scm.com/docs/git-fetch) | Recebe objetos e atualiza referências de acompanhamento remotas locais. |
 | [git-pull](https://git-scm.com/docs/git-pull) | Fetch seguido de integração; modos merge/rebase podem conflitar. `--ff-only` explícito recusa divergência e mantém o exercício previsível entre versões/configurações. |
 | [git-push](https://git-scm.com/docs/git-push) | Envio de commits e atualização de referências remotas; `-u` configura acompanhamento. |

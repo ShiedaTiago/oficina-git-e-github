@@ -29,9 +29,9 @@
     <section id="local" data-checkpoint>
       <h2>1. Inicie o repositório</h2>
       <p>Entre na cópia do projeto e crie a branch principal. O ponto final pede o status do repositório.</p>
-      <pre><code>cd ~/oficina-git/site-da-turma
-git init -b main
-git status</code></pre>
+      <pre><code><span class="cmd-line" data-cmd-hint="Muda para a pasta especificada." title="Muda para a pasta especificada." tabindex="0">cd ~/oficina-git/site-da-turma</span>
+<span class="cmd-line" data-cmd-hint="Inicia um repositório Git local com a branch principal chamada main." title="Inicia um repositório Git local com a branch principal chamada main." tabindex="0">git init -b main</span>
+<span class="cmd-line" data-cmd-hint="Exibe o estado dos arquivos modificados, preparados e não rastreados." title="Exibe o estado dos arquivos modificados, preparados e não rastreados." tabindex="0">git status</span></code></pre>
       <p data-expected><strong>Resultado esperado:</strong> o Git informa que você está na branch <code>main</code>, ainda sem commits, e lista os três arquivos como não rastreados.</p>
       <p data-recovery><strong>Se não acontecer:</strong> use <code>pwd</code> e <code>ls</code> para localizar a cópia correta. Não execute <code>git init</code> na sua pasta pessoal inteira.</p>
     </section>
@@ -39,10 +39,10 @@ git status</code></pre>
     <section data-checkpoint>
       <h2>2. Registre a base do projeto</h2>
       <p>Prepare somente os arquivos do exemplo, confira a seleção e crie o primeiro snapshot.</p>
-      <pre><code>git add index.html styles.css README.md
-git status
-git commit -m "Cria base do site da turma"
-git log --oneline</code></pre>
+      <pre><code><span class="cmd-line" data-cmd-hint="Prepara o conteúdo atual do(s) arquivo(s) para o próximo commit." title="Prepara o conteúdo atual do(s) arquivo(s) para o próximo commit." tabindex="0">git add index.html styles.css README.md</span>
+<span class="cmd-line" data-cmd-hint="Exibe o estado dos arquivos modificados, preparados e não rastreados." title="Exibe o estado dos arquivos modificados, preparados e não rastreados." tabindex="0">git status</span>
+<span class="cmd-line" data-cmd-hint="Registra o snapshot preparado no histórico local com uma mensagem explicativa." title="Registra o snapshot preparado no histórico local com uma mensagem explicativa." tabindex="0">git commit -m "Cria base do site da turma"</span>
+<span class="cmd-line" data-cmd-hint="Lista o histórico de commits de forma resumida, um por linha." title="Lista o histórico de commits de forma resumida, um por linha." tabindex="0">git log --oneline</span></code></pre>
       <p data-expected><strong>Resultado esperado:</strong> o status mostra os três arquivos preparados antes do commit; depois, o log exibe um commit com a mensagem escolhida.</p>
       <p data-recovery><strong>Se o Git pedir identidade:</strong> siga o <a href="preparacao.html#identidade">guia de autoria</a>, configure nome e e-mail e repita apenas o comando <code>git commit</code>.</p>
     </section>
@@ -50,10 +50,10 @@ git log --oneline</code></pre>
     <section data-checkpoint>
       <h2>3. Ignore rascunhos locais</h2>
       <p>Crie uma pasta <code>rascunhos</code> e um arquivo dentro dela pelo editor. Depois crie <code>.gitignore</code> com a linha <code>rascunhos/</code>.</p>
-      <pre><code>git check-ignore rascunhos/notas.txt
-git status
-git add .gitignore
-git commit -m "Ignora rascunhos locais"</code></pre>
+      <pre><code><span class="cmd-line" data-cmd-hint="Verifica se um caminho é ignorado pelas regras do repositório." title="Verifica se um caminho é ignorado pelas regras do repositório." tabindex="0">git check-ignore rascunhos/notas.txt</span>
+<span class="cmd-line" data-cmd-hint="Exibe o estado dos arquivos modificados, preparados e não rastreados." title="Exibe o estado dos arquivos modificados, preparados e não rastreados." tabindex="0">git status</span>
+<span class="cmd-line" data-cmd-hint="Prepara o conteúdo atual do(s) arquivo(s) para o próximo commit." title="Prepara o conteúdo atual do(s) arquivo(s) para o próximo commit." tabindex="0">git add .gitignore</span>
+<span class="cmd-line" data-cmd-hint="Registra o snapshot preparado no histórico local com uma mensagem explicativa." title="Registra o snapshot preparado no histórico local com uma mensagem explicativa." tabindex="0">git commit -m "Ignora rascunhos locais"</span></code></pre>
       <p data-expected><strong>Resultado esperado:</strong> <code>check-ignore</code> imprime o caminho do arquivo ignorado, e somente o arquivo <code>.gitignore</code> entra no novo commit.</p>
       <p data-recovery><strong>Se o rascunho aparecer no status:</strong> confira se o arquivo se chama exatamente <code>.gitignore</code> e se contém <code>rascunhos/</code> em uma linha própria.</p>
     </section>
@@ -61,8 +61,8 @@ git commit -m "Ignora rascunhos locais"</code></pre>
     <section data-checkpoint>
       <h2>4. Leia uma alteração antes de prepará-la</h2>
       <p>No editor, troque o texto visível do elemento <code>&lt;h1&gt;</code>, de <em>Site da turma</em> para <em>Turma em construção</em>, em <code>index.html</code> e salve.</p>
-      <pre><code>git status --short
-git diff -- index.html</code></pre>
+      <pre><code><span class="cmd-line" data-cmd-hint="Exibe o estado do repositório em formato compacto de duas colunas." title="Exibe o estado do repositório em formato compacto de duas colunas." tabindex="0">git status --short</span>
+<span class="cmd-line" data-cmd-hint="Compara alterações não preparadas no arquivo especificado." title="Compara alterações não preparadas no arquivo especificado." tabindex="0">git diff -- index.html</span></code></pre>
       <p data-expected><strong>Resultado esperado:</strong> o status marca <code>index.html</code> como modificado e o diff mostra a linha anterior removida e a nova linha acrescentada.</p>
       <p data-recovery><strong>Se não houver diferença:</strong> salve o arquivo, confirme que editou a cópia versionada e procure o texto com seu editor antes de tentar novamente.</p>
     </section>
@@ -70,10 +70,10 @@ git diff -- index.html</code></pre>
     <section data-checkpoint>
       <h2>5. Observe o snapshot preparado</h2>
       <p>Prepare a primeira versão. Sem executar outro <code>git add</code>, mude o mesmo título para <em>Turma colaborativa</em> e salve novamente.</p>
-      <pre><code>git add index.html
-git diff --cached -- index.html
-git diff -- index.html
-git status --short</code></pre>
+      <pre><code><span class="cmd-line" data-cmd-hint="Prepara o conteúdo atual do(s) arquivo(s) para o próximo commit." title="Prepara o conteúdo atual do(s) arquivo(s) para o próximo commit." tabindex="0">git add index.html</span>
+<span class="cmd-line" data-cmd-hint="Compara alterações preparadas do arquivo específico com o último commit." title="Compara alterações preparadas do arquivo específico com o último commit." tabindex="0">git diff --cached -- index.html</span>
+<span class="cmd-line" data-cmd-hint="Compara alterações não preparadas no arquivo especificado." title="Compara alterações não preparadas no arquivo especificado." tabindex="0">git diff -- index.html</span>
+<span class="cmd-line" data-cmd-hint="Exibe o estado do repositório em formato compacto de duas colunas." title="Exibe o estado do repositório em formato compacto de duas colunas." tabindex="0">git status --short</span></code></pre>
       <p data-expected><strong>Resultado esperado:</strong> o primeiro diff contém <em>Turma em construção</em>; o segundo contém <em>Turma colaborativa</em>. O status mostra mudança preparada e mudança no trabalho.</p>
       <p data-recovery><strong>Se os dois diffs forem iguais:</strong> você provavelmente executou <code>git add</code> depois da segunda edição. Continue, mas repita este checkpoint depois para observar os dois estados.</p>
     </section>
@@ -81,11 +81,11 @@ git status --short</code></pre>
     <section data-checkpoint>
       <h2>6. Faça commits pequenos e conscientes</h2>
       <p>Registre primeiro o snapshot já preparado. Em seguida, prepare e registre a edição que permaneceu na área de trabalho.</p>
-      <pre><code>git commit -m "Atualiza título preparado"
-git diff -- index.html
-git add index.html
-git commit -m "Conclui título colaborativo"
-git log --oneline -3</code></pre>
+      <pre><code><span class="cmd-line" data-cmd-hint="Registra o snapshot preparado no histórico local com uma mensagem explicativa." title="Registra o snapshot preparado no histórico local com uma mensagem explicativa." tabindex="0">git commit -m "Atualiza título preparado"</span>
+<span class="cmd-line" data-cmd-hint="Compara alterações não preparadas no arquivo especificado." title="Compara alterações não preparadas no arquivo especificado." tabindex="0">git diff -- index.html</span>
+<span class="cmd-line" data-cmd-hint="Prepara o conteúdo atual do(s) arquivo(s) para o próximo commit." title="Prepara o conteúdo atual do(s) arquivo(s) para o próximo commit." tabindex="0">git add index.html</span>
+<span class="cmd-line" data-cmd-hint="Registra o snapshot preparado no histórico local com uma mensagem explicativa." title="Registra o snapshot preparado no histórico local com uma mensagem explicativa." tabindex="0">git commit -m "Conclui título colaborativo"</span>
+<span class="cmd-line" data-cmd-hint="Exibe apenas os últimos 3 commits em formato resumido." title="Exibe apenas os últimos 3 commits em formato resumido." tabindex="0">git log --oneline -3</span></code></pre>
       <p data-expected><strong>Resultado esperado:</strong> são criados dois commits em sequência. O primeiro contém a versão preparada; o segundo registra a edição restante.</p>
       <p data-recovery><strong>Se o segundo commit disser que não há mudanças:</strong> confira o conteúdo de <code>index.html</code>. Se a versão final já entrou no primeiro commit, apenas siga adiante.</p>
     </section>
@@ -93,11 +93,11 @@ git log --oneline -3</code></pre>
     <section data-checkpoint>
       <h2>7. Retire uma alteração do staging sem apagá-la</h2>
       <p>Edite uma frase já existente, salve e prepare o arquivo. Então retire-o do staging e confira os dois estados.</p>
-      <pre><code>git add index.html
-git diff --cached -- index.html
-git restore --staged index.html
-git status --short
-git diff -- index.html</code></pre>
+      <pre><code><span class="cmd-line" data-cmd-hint="Prepara o conteúdo atual do(s) arquivo(s) para o próximo commit." title="Prepara o conteúdo atual do(s) arquivo(s) para o próximo commit." tabindex="0">git add index.html</span>
+<span class="cmd-line" data-cmd-hint="Compara alterações preparadas do arquivo específico com o último commit." title="Compara alterações preparadas do arquivo específico com o último commit." tabindex="0">git diff --cached -- index.html</span>
+<span class="cmd-line" data-cmd-hint="Retira o arquivo do staging preservando suas alterações na área de trabalho." title="Retira o arquivo do staging preservando suas alterações na área de trabalho." tabindex="0">git restore --staged index.html</span>
+<span class="cmd-line" data-cmd-hint="Exibe o estado do repositório em formato compacto de duas colunas." title="Exibe o estado do repositório em formato compacto de duas colunas." tabindex="0">git status --short</span>
+<span class="cmd-line" data-cmd-hint="Compara alterações não preparadas no arquivo especificado." title="Compara alterações não preparadas no arquivo especificado." tabindex="0">git diff -- index.html</span></code></pre>
       <p data-expected><strong>Resultado esperado:</strong> depois de <code>git restore --staged</code>, a edição continua no arquivo e aparece no diff comum, mas deixa de aparecer no diff preparado.</p>
       <p data-recovery><strong>Se sua edição desaparecer:</strong> não salve outras mudanças. Use o histórico do editor ou peça ajuda; <code>restore --staged</code> sozinho não deveria alterar o arquivo de trabalho.</p>
     </section>
@@ -105,11 +105,11 @@ git diff -- index.html</code></pre>
     <section data-checkpoint>
       <h2>8. Desfaça um commit preservando o histórico</h2>
       <p>Prepare e registre a edição anterior. Com o status limpo, crie outro commit que desfaz somente esse último commit simples.</p>
-      <pre><code>git add index.html
-git commit -m "Testa uma nova frase"
-git status
-git revert --no-edit HEAD
-git log --oneline -3</code></pre>
+      <pre><code><span class="cmd-line" data-cmd-hint="Prepara o conteúdo atual do(s) arquivo(s) para o próximo commit." title="Prepara o conteúdo atual do(s) arquivo(s) para o próximo commit." tabindex="0">git add index.html</span>
+<span class="cmd-line" data-cmd-hint="Registra o snapshot preparado no histórico local com uma mensagem explicativa." title="Registra o snapshot preparado no histórico local com uma mensagem explicativa." tabindex="0">git commit -m "Testa uma nova frase"</span>
+<span class="cmd-line" data-cmd-hint="Exibe o estado dos arquivos modificados, preparados e não rastreados." title="Exibe o estado dos arquivos modificados, preparados e não rastreados." tabindex="0">git status</span>
+<span class="cmd-line" data-cmd-hint="Cria um novo commit que desfaz o último commit sem abrir o editor de texto." title="Cria um novo commit que desfaz o último commit sem abrir o editor de texto." tabindex="0">git revert --no-edit HEAD</span>
+<span class="cmd-line" data-cmd-hint="Exibe apenas os últimos 3 commits em formato resumido." title="Exibe apenas os últimos 3 commits em formato resumido." tabindex="0">git log --oneline -3</span></code></pre>
       <p data-expected><strong>Resultado esperado:</strong> o log mantém o commit original e acrescenta um novo commit de reversão. O status volta a ficar limpo.</p>
       <p data-recovery><strong>Se houver alterações antes do revert:</strong> pare e faça um commit ou guarde conscientemente seu trabalho. Não use <code>reset --hard</code> para limpar a atividade.</p>
     </section>
@@ -117,12 +117,12 @@ git log --oneline -3</code></pre>
     <section id="branches" data-checkpoint>
       <h2>9. Crie e integre uma branch</h2>
       <p>Crie uma branch, acrescente uma descrição ao final de <code>README.md</code>, salve e faça o commit. Depois volte para <code>main</code>.</p>
-      <pre><code>git switch -c melhoria-descricao
-git add README.md
-git commit -m "Melhora descrição do projeto"
-git switch main
-git merge --ff-only melhoria-descricao
-git log --oneline --decorate -4</code></pre>
+      <pre><code><span class="cmd-line" data-cmd-hint="Cria uma nova branch e alterna para ela imediatamente." title="Cria uma nova branch e alterna para ela imediatamente." tabindex="0">git switch -c melhoria-descricao</span>
+<span class="cmd-line" data-cmd-hint="Prepara o conteúdo atual do(s) arquivo(s) para o próximo commit." title="Prepara o conteúdo atual do(s) arquivo(s) para o próximo commit." tabindex="0">git add README.md</span>
+<span class="cmd-line" data-cmd-hint="Registra o snapshot preparado no histórico local com uma mensagem explicativa." title="Registra o snapshot preparado no histórico local com uma mensagem explicativa." tabindex="0">git commit -m "Melhora descrição do projeto"</span>
+<span class="cmd-line" data-cmd-hint="Alterna para uma branch existente protegendo alterações pendentes." title="Alterna para uma branch existente protegendo alterações pendentes." tabindex="0">git switch main</span>
+<span class="cmd-line" data-cmd-hint="Integra alterações somente se for possível avançar diretamente (fast-forward)." title="Integra alterações somente se for possível avançar diretamente (fast-forward)." tabindex="0">git merge --ff-only melhoria-descricao</span>
+<span class="cmd-line" data-cmd-hint="Exibe os últimos 4 commits resumidos com nomes de branches e tags." title="Exibe os últimos 4 commits resumidos com nomes de branches e tags." tabindex="0">git log --oneline --decorate -4</span></code></pre>
       <p data-expected><strong>Resultado esperado:</strong> a branch <code>main</code> avança até o commit da melhoria por fast-forward; nenhum commit de merge adicional é criado.</p>
       <p data-recovery><strong>Se o README não entrar no commit:</strong> confirme que salvou o arquivo. Se o merge recusar fast-forward, não force: consulte o <a href="diagnostico.html">diagnóstico</a>.</p>
     </section>
@@ -130,13 +130,13 @@ git log --oneline --decorate -4</code></pre>
     <section data-checkpoint>
       <h2>10. Produza um conflito controlado</h2>
       <p>Com o status limpo, crie <code>mensagem-alternativa</code>. Nela, troque a frase do elemento <code>mensagem</code> por <em>Aprendemos criando.</em>, salve e faça commit. Volte para <code>main</code>, troque a mesma frase por <em>Aprendemos colaborando.</em> e faça outro commit.</p>
-      <pre><code>git switch -c mensagem-alternativa
-git add index.html
-git commit -m "Cria mensagem alternativa"
-git switch main
-git add index.html
-git commit -m "Atualiza mensagem principal"
-git merge mensagem-alternativa</code></pre>
+      <pre><code><span class="cmd-line" data-cmd-hint="Cria uma nova branch e alterna para ela imediatamente." title="Cria uma nova branch e alterna para ela imediatamente." tabindex="0">git switch -c mensagem-alternativa</span>
+<span class="cmd-line" data-cmd-hint="Prepara o conteúdo atual do(s) arquivo(s) para o próximo commit." title="Prepara o conteúdo atual do(s) arquivo(s) para o próximo commit." tabindex="0">git add index.html</span>
+<span class="cmd-line" data-cmd-hint="Registra o snapshot preparado no histórico local com uma mensagem explicativa." title="Registra o snapshot preparado no histórico local com uma mensagem explicativa." tabindex="0">git commit -m "Cria mensagem alternativa"</span>
+<span class="cmd-line" data-cmd-hint="Alterna para uma branch existente protegendo alterações pendentes." title="Alterna para uma branch existente protegendo alterações pendentes." tabindex="0">git switch main</span>
+<span class="cmd-line" data-cmd-hint="Prepara o conteúdo atual do(s) arquivo(s) para o próximo commit." title="Prepara o conteúdo atual do(s) arquivo(s) para o próximo commit." tabindex="0">git add index.html</span>
+<span class="cmd-line" data-cmd-hint="Registra o snapshot preparado no histórico local com uma mensagem explicativa." title="Registra o snapshot preparado no histórico local com uma mensagem explicativa." tabindex="0">git commit -m "Atualiza mensagem principal"</span>
+<span class="cmd-line" data-cmd-hint="Integra o histórico e as alterações da branch especificada na branch atual." title="Integra o histórico e as alterações da branch especificada na branch atual." tabindex="0">git merge mensagem-alternativa</span></code></pre>
       <p data-expected><strong>Resultado esperado:</strong> o merge para com um conflito em <code>index.html</code>. O arquivo contém marcadores que delimitam as duas versões da mesma linha.</p>
       <p data-recovery><strong>Se precisar recomeçar:</strong> execute <code>git merge --abort</code> enquanto o merge estiver em andamento. Isso retorna ao estado limpo anterior à tentativa.</p>
     </section>
@@ -144,11 +144,11 @@ git merge mensagem-alternativa</code></pre>
     <section data-checkpoint>
       <h2>11. Resolva e conclua o conflito</h2>
       <p>Abra <code>index.html</code>, leia os dois lados e deixe uma única frase: <em>Aprendemos criando e colaborando.</em>. Remova todos os marcadores, salve e abra a página no navegador.</p>
-      <pre><code>git diff --check
-git add index.html
-git status
-git commit -m "Combina as mensagens da turma"
-git log --oneline --graph --decorate -6</code></pre>
+      <pre><code><span class="cmd-line" data-cmd-hint="Procura problemas de espaço em branco e marcadores de conflito pendentes." title="Procura problemas de espaço em branco e marcadores de conflito pendentes." tabindex="0">git diff --check</span>
+<span class="cmd-line" data-cmd-hint="Prepara o conteúdo atual do(s) arquivo(s) para o próximo commit." title="Prepara o conteúdo atual do(s) arquivo(s) para o próximo commit." tabindex="0">git add index.html</span>
+<span class="cmd-line" data-cmd-hint="Exibe o estado dos arquivos modificados, preparados e não rastreados." title="Exibe o estado dos arquivos modificados, preparados e não rastreados." tabindex="0">git status</span>
+<span class="cmd-line" data-cmd-hint="Registra o snapshot preparado no histórico local com uma mensagem explicativa." title="Registra o snapshot preparado no histórico local com uma mensagem explicativa." tabindex="0">git commit -m "Combina as mensagens da turma"</span>
+<span class="cmd-line" data-cmd-hint="Exibe até 6 commits com grafo, branches e tags decoradas." title="Exibe até 6 commits com grafo, branches e tags decoradas." tabindex="0">git log --oneline --graph --decorate -6</span></code></pre>
       <p data-expected><strong>Resultado esperado:</strong> <code>git diff --check</code> não aponta marcadores; o commit conclui o merge e o grafo preserva os dois caminhos anteriores.</p>
       <p data-recovery><strong>Se o Git ainda indicar conflito:</strong> procure por <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code> e <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>. Remova-os, salve e prepare o arquivo outra vez.</p>
     </section>
@@ -156,9 +156,9 @@ git log --oneline --graph --decorate -6</code></pre>
     <section id="remoto" data-checkpoint>
       <h2>12. Conecte um repositório vazio</h2>
       <p>Opcional e com internet: crie no GitHub um repositório vazio, sem README, licença ou <code>.gitignore</code>. Substitua usuário e repositório no endereço.</p>
-      <pre><code>git remote add origin https://github.com/&lt;usuario&gt;/&lt;repositorio&gt;.git
-git remote -v
-git push -u origin main</code></pre>
+      <pre><code><span class="cmd-line" data-cmd-hint="Associa o repositório local a um servidor remoto chamado origin." title="Associa o repositório local a um servidor remoto chamado origin." tabindex="0">git remote add origin https://github.com/&lt;usuario&gt;/&lt;repositorio&gt;.git</span>
+<span class="cmd-line" data-cmd-hint="Lista os remotos configurados e suas URLs de busca e envio." title="Lista os remotos configurados e suas URLs de busca e envio." tabindex="0">git remote -v</span>
+<span class="cmd-line" data-cmd-hint="Envia commits locais para o remoto e configura o acompanhamento da branch (upstream)." title="Envia commits locais para o remoto e configura o acompanhamento da branch (upstream)." tabindex="0">git push -u origin main</span></code></pre>
       <p data-expected><strong>Resultado esperado:</strong> o remoto <code>origin</code> aparece para busca e envio; depois da autenticação, <code>main</code> passa a acompanhar <code>origin/main</code>.</p>
       <p data-recovery><strong>Se o origin já existir:</strong> use <code>git remote get-url origin</code> e confirme o endereço. Não coloque senha ou token na URL; siga o gerenciador de credenciais.</p>
     </section>
@@ -166,12 +166,12 @@ git push -u origin main</code></pre>
     <section data-checkpoint>
       <h2>13. Envie uma proposta em branch</h2>
       <p>Pessoa B: com autorização, clone o repositório em outra pasta, entre nela, crie uma branch e acrescente uma linha ao README. Use informações que aceite compartilhar.</p>
-      <pre><code>git clone https://github.com/&lt;usuario&gt;/&lt;repositorio&gt;.git
-cd &lt;repositorio&gt;
-git switch -c melhoria-dupla
-git add README.md
-git commit -m "Propõe melhoria em dupla"
-git push -u origin melhoria-dupla</code></pre>
+      <pre><code><span class="cmd-line" data-cmd-hint="Copia um repositório remoto completo e seu histórico para uma nova pasta." title="Copia um repositório remoto completo e seu histórico para uma nova pasta." tabindex="0">git clone https://github.com/&lt;usuario&gt;/&lt;repositorio&gt;.git</span>
+<span class="cmd-line" data-cmd-hint="Muda para a pasta especificada." title="Muda para a pasta especificada." tabindex="0">cd &lt;repositorio&gt;</span>
+<span class="cmd-line" data-cmd-hint="Cria uma nova branch e alterna para ela imediatamente." title="Cria uma nova branch e alterna para ela imediatamente." tabindex="0">git switch -c melhoria-dupla</span>
+<span class="cmd-line" data-cmd-hint="Prepara o conteúdo atual do(s) arquivo(s) para o próximo commit." title="Prepara o conteúdo atual do(s) arquivo(s) para o próximo commit." tabindex="0">git add README.md</span>
+<span class="cmd-line" data-cmd-hint="Registra o snapshot preparado no histórico local com uma mensagem explicativa." title="Registra o snapshot preparado no histórico local com uma mensagem explicativa." tabindex="0">git commit -m "Propõe melhoria em dupla"</span>
+<span class="cmd-line" data-cmd-hint="Envia commits locais para o remoto e configura o acompanhamento da branch (upstream)." title="Envia commits locais para o remoto e configura o acompanhamento da branch (upstream)." tabindex="0">git push -u origin melhoria-dupla</span></code></pre>
       <p data-expected><strong>Resultado esperado:</strong> a branch <code>melhoria-dupla</code> aparece no GitHub sem alterar diretamente a branch <code>main</code>.</p>
       <p data-recovery><strong>Se houver erro de permissão:</strong> confirme a conta autenticada e o convite de colaboração. Sem acesso ou rede, faça a revisão e o merge localmente no mesmo computador.</p>
     </section>
@@ -179,10 +179,10 @@ git push -u origin melhoria-dupla</code></pre>
     <section data-checkpoint>
       <h2>14. Revise, integre e sincronize</h2>
       <p>No GitHub, Pessoa B abre um pull request de <code>melhoria-dupla</code> para <code>main</code>. Pessoa A lê o diff, conversa sobre a proposta e integra quando concordar. Depois cada pessoa atualiza sua cópia.</p>
-      <pre><code>git switch main
-git pull --ff-only
-git log --oneline --graph --decorate -6
-git status</code></pre>
+      <pre><code><span class="cmd-line" data-cmd-hint="Alterna para uma branch existente protegendo alterações pendentes." title="Alterna para uma branch existente protegendo alterações pendentes." tabindex="0">git switch main</span>
+<span class="cmd-line" data-cmd-hint="Busca e integra alterações do remoto somente se não houver divergência." title="Busca e integra alterações do remoto somente se não houver divergência." tabindex="0">git pull --ff-only</span>
+<span class="cmd-line" data-cmd-hint="Exibe até 6 commits com grafo, branches e tags decoradas." title="Exibe até 6 commits com grafo, branches e tags decoradas." tabindex="0">git log --oneline --graph --decorate -6</span>
+<span class="cmd-line" data-cmd-hint="Exibe o estado dos arquivos modificados, preparados e não rastreados." title="Exibe o estado dos arquivos modificados, preparados e não rastreados." tabindex="0">git status</span></code></pre>
       <p data-expected><strong>Resultado esperado:</strong> a branch local avança para a versão integrada no GitHub, o log inclui a proposta e o status informa que não há alterações pendentes.</p>
       <p data-recovery><strong>Se <code>git pull --ff-only</code> parar:</strong> não force nem apague commits. Execute <code>git status</code> e <code>git log --oneline --all --graph</code> e diagnostique a divergência com a turma.</p>
     </section>
