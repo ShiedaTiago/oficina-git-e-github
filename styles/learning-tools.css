@@ -1,0 +1,8 @@
+.command-results { display: grid; gap: 1rem; }
+.command-card { border-bottom: 1px solid currentColor; padding-block: .75rem; }
+.command-card pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+.reference-content input[type="search"] { display: block; width: 100%; margin-block: .75rem; }
+[data-copy-feedback] textarea { display: block; width: 100%; min-height: 5rem; }
+.learning-quiz fieldset { margin-block: 1rem; padding: 1rem; }
+.learning-quiz label { display: block; padding-block: .5rem; cursor: pointer; }
+.learning-quiz input { margin-inline-end: .75rem; }
