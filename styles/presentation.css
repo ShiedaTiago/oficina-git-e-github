@@ -34,6 +34,8 @@
 .code-block { margin: 1.6rem 0; background: #252d28; color: #f6f4e9; border-radius: 9px; overflow: hidden; }
 .code-language { display: block; padding: .7rem 1.2rem; color: #d9ddca; border-bottom: 1px solid #4a5048; font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; }
 .code-block pre { margin: 0; padding: 1.3rem; font-size: clamp(1rem, 1.9vw, 1.45rem); line-height: 1.6; }
+.code-block .copy-command { margin: 0 1.3rem 1rem; padding: .5rem .8rem; border: 1px solid #778879; border-radius: 6px; background: #36463b; color: white; min-height: 44px; }
+.code-block [data-copy-feedback] { padding: 0 1.3rem 1rem; font-size: .85rem; }
 .presentation-footer { display: flex; gap: .7rem; align-items: center; margin: 0 4.5vw; padding: 1rem 0 1.3rem; border-top: 1px solid var(--line); }
 .keyboard-hint { color: var(--muted); font-size: .75rem; margin-right: auto; }
 .progress { color: var(--muted); font: .8rem Consolas, monospace; margin-right: 1rem; }

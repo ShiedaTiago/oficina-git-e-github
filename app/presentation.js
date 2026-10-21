@@ -44,6 +44,10 @@
         pre.setAttribute('aria-label', 'Comando para o terminal');
         pre.append(element('code', '', block.code ?? text));
         frame.append(pre);
+        const copy = element('button', 'copy-command', 'Copiar comando');
+        copy.type = 'button';
+        copy.dataset.copyCommand = block.code ?? text;
+        frame.append(copy);
         return frame;
       }
       case 'list': return renderList(block.items, 'slide-list', block.ordered);

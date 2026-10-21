@@ -39,3 +39,4 @@ it('registered widget leaves editor keystrokes with the presentation on the same
 it('destroy removes controls and their listeners', () => {
   mount(); const button = root.querySelector('button'); instance.destroy(); button.click(); expect(root.childNodes).toHaveLength(0);
 });
+

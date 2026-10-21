@@ -16,8 +16,13 @@
     const root = document.getElementById('app');
     if (!root) return;
     window.Oficina.presentation?.destroy();
+    window.Oficina.referenceController?.destroy();
+    window.Oficina.clipboardController?.destroy();
+    window.Oficina.registerQuiz?.();
     const presentation = window.Oficina.mountPresentation(root, window.Oficina.slides || fixture);
-    window.Oficina = { ...window.Oficina, presentation };
+    const referenceController = window.Oficina.attachReference?.(root, window.Oficina.commands || []);
+    const clipboardController = window.Oficina.attachClipboard?.(root);
+    window.Oficina = { ...window.Oficina, presentation, referenceController, clipboardController };
   }
 
   window.Oficina = { ...window.Oficina, bootstrap };

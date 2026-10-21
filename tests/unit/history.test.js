@@ -12,7 +12,8 @@ const initial = () => { expect(api?.createHistoryState).toBeTypeOf('function'); 
 const advance = state => api.reduceHistory(state, { type: 'advance' });
 const conflict = () => Array.from({length: 4}).reduce(advance, initial());
 it('guides a divergent DAG with HEAD pointing at the destination branch', () => {
-  let state = initial();
+  const original = initial();
+  let state = original;
   expect(state.commits).toEqual([{ id: 'c1', parents: [], text: 'Olá, turma!' }]);
   const saved = JSON.stringify(state);
   const branched = advance(state);
@@ -23,7 +24,7 @@ it('guides a divergent DAG with HEAD pointing at the destination branch', () => 
   state = advance(edited);
   expect(state.head).toBe('main');
   expect(state.branches).toEqual({ main: 'c3', aluno: 'c2' });
-  expect(JSON.stringify(initial())).toBe(saved);
+  expect(JSON.stringify(original)).toBe(saved);
   expect(branched.commits).toHaveLength(1);
   state = advance(state);
   expect(state.conflict).toEqual({ source: 'aluno', target: 'main' });
@@ -56,3 +57,4 @@ it('ignores unsupported actions and resolution outside a conflict', () => {
     expect(api.reduceHistory(state, action)).toEqual(state);
   }
 });
+

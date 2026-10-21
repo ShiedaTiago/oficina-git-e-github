@@ -48,6 +48,7 @@ describe('presentation lifecycle and navigation', () => {
     expect(root.querySelector('img')).toBeNull();
     expect(root.textContent).toContain('<img src=x onerror=alert(1)>');
     expect(root.querySelector('code').textContent).toBe('git status');
+    expect(root.querySelector('[data-copy-command]')?.dataset.copyCommand).toBe('git status');
     expect(root.querySelector('[data-notes]').hidden).toBe(true);
     expect(root.querySelector('[data-action="previous"]').disabled).toBe(true);
     expect(root.querySelector('[data-widget="staging"]')).not.toBeNull();
