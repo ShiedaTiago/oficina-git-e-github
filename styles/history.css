@@ -1,0 +1,11 @@
+.history-simulator { border: 2px solid currentColor; border-radius: .7rem; padding: 1rem; }
+.history-simulator svg { display: block; width: min(100%, 36rem); height: auto; margin: auto; }
+.history-edge { stroke: #495562; stroke-width: 3; }
+.history-node { fill: #f1d6b8; stroke: #713c1b; stroke-width: 3; }
+.history-id { fill: #231f1b; font: bold 15px system-ui, sans-serif; }
+.history-refs { font-weight: 700; overflow-wrap: anywhere; }
+.history-records { padding-left: 1.5rem; overflow-wrap: anywhere; }
+.history-simulator label { display: block; font-weight: 700; }
+.history-simulator textarea { box-sizing: border-box; display: block; width: 100%; margin: .5rem 0 1rem; padding: .75rem; font: inherit; }
+.history-controls { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1rem; }
+.history-simulator button { white-space: normal; }
