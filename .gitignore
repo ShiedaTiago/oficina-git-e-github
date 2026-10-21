@@ -1,5 +1,35 @@
-node_modules/
-dist/
-coverage/
-test-results/
-playwright-report/
+# Dependências instaladas localmente. O package-lock.json deve ser versionado.
+/node_modules/
+
+# Artefatos gerados pelo empacotamento e pelos testes.
+/dist/
+/coverage/
+/test-results/
+/playwright-report/
+/.nyc_output/
+
+# Variáveis e configurações locais que podem conter credenciais.
+.env
+.env.*
+!.env.example
+.npmrc
+
+# Logs e arquivos temporários.
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+/.cache/
+/tmp/
+
+# Configurações pessoais de editores e IDEs.
+/.vscode/
+/.idea/
+*.code-workspace
+
+# Metadados gerados pelo sistema operacional.
+.DS_Store
+Thumbs.db
+Desktop.ini
