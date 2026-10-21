@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Diagnóstico sem perder trabalho · Git e GitHub, na prática</title>
+  <link rel="stylesheet" href="../styles/base.css">
+  <link rel="stylesheet" href="../styles/preparation.css">
+</head>
+<body>
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<div class="guide">
+  <header>
+    <a href="../index.html">Voltar à apresentação</a>
+    <p class="eyebrow">Quando algo sair do esperado</p>
+    <h1>Leia a mensagem. Preserve seu trabalho.</h1>
+    <p>Comece com <code>git status</code>. Copie a mensagem de erro para pedir ajuda, removendo credenciais e dados pessoais. Execute cada passo apenas na pasta do exercício.</p>
+    <nav aria-label="Problemas frequentes"><ul>
+      <li><a href="#git-ausente">Git ausente</a></li><li><a href="#pasta">Pasta errada</a></li>
+      <li><a href="#identidade">Identidade</a></li><li><a href="#autenticacao">Autenticação</a></li>
+      <li><a href="#convite">Convite</a></li><li><a href="#push">Push rejeitado</a></li><li><a href="#conflito">Conflito</a></li>
+    </ul></nav>
+  </header>
+  <main id="conteudo">
+    <section id="git-ausente">
+      <h2>“git: command not found” ou “git não é reconhecido”</h2>
+      <p>O terminal não encontrou o programa. No Windows, abra <strong>Git Bash</strong> pelo menu Iniciar; se acabou de instalar, feche o terminal e abra novamente. No Linux, confira a instalação da sua distribuição no <a href="preparacao.html#linux">guia de preparação</a>. No Windows, volte à <a href="preparacao.html#windows">instalação do Git for Windows</a>.</p>
+      <pre tabindex="0" aria-label="Verificar se Git está disponível"><code>git --version</code></pre>
+      <p>Sem permissão de instalação, peça ajuda à administração. Não baixe executáveis de sites de correção de erros.</p>
+    </section>
+    <section id="pasta">
+      <h2>“not a git repository” ou arquivos inesperados</h2>
+      <pre tabindex="0" aria-label="Conferir pasta atual"><code>pwd
+ls
+git status</code></pre>
+      <p>Confirme que está na cópia de <code>site-da-turma</code>, e não na pasta pessoal, no pacote da apresentação ou em outra cópia do projeto. Use <code>cd ~/oficina-git/site-da-turma</code> se seguiu a preparação.</p>
+      <p>Se o exercício local ainda não executou <code>git init</code>, esse erro é esperado. Execute a inicialização somente quando o roteiro pedir, dentro da cópia correta. Um repositório obtido com <code>git clone</code> já vem inicializado. Não apague a pasta <code>.git</code> para tentar corrigir um problema.</p>
+    </section>
+    <section id="identidade">
+      <h2>“Author identity unknown”</h2>
+      <p>Dentro do repositório, consulte a identidade efetiva:</p>
+      <pre tabindex="0" aria-label="Conferir autoria dos commits"><code>git config user.name
+git config user.email</code></pre>
+      <p>Se estiver vazia, siga a <a href="preparacao.html#identidade">configuração de identidade</a> e tente novamente o commit. O exemplo Ana Exemplo é fictício. Use seu endereço verificado ou o <code>noreply</code> copiado da sua conta. Nome/e-mail não resolvem problemas de login.</p>
+    </section>
+    <section id="autenticacao">
+      <h2>Falha de autenticação ou “Repository not found”</h2>
+      <ol>
+        <li>Confira internet e abra o repositório no navegador com a conta correta. Um repositório privado pode aparecer como inexistente para quem não tem acesso.</li>
+        <li>Confira <code>git remote -v</code>. O remoto deve usar o endereço HTTPS fornecido pelo repositório, sem senha nem token na URL. Confirme usuário, organização e nome do projeto antes de alterar qualquer endereço.</li>
+        <li>Retome o <a href="preparacao.html#github">fluxo HTTPS com GCM ou GitHub CLI</a>. A senha da conta GitHub não autentica Git por HTTPS. No Linux com CLI, <code>gh auth status</code> ajuda a conferir a conta e a sessão.</li>
+        <li>No Windows, uma conta antiga pode estar salva no Gerenciador de Credenciais. Siga a <a href="https://docs.github.com/en/get-started/git-basics/caching-your-github-credentials-in-git">orientação oficial</a> e remova apenas a entrada GitHub incorreta se necessário; a próxima operação pedirá novo login. Não limpe outras credenciais.</li>
+      </ol>
+      <p>Se a organização exigir SSO ou outras políticas, peça orientação a quem administra o acesso. Nunca desative a verificação de certificado TLS para contornar um erro.</p>
+    </section>
+    <section id="convite">
+      <h2>O convite da dupla ainda está pendente</h2>
+      <p>Quem convidou deve conferir o nome de usuário e o estado do convite em <strong>Settings → Collaborators</strong> do repositório. Quem recebeu deve entrar na conta convidada e aceitar o convite recebido por e-mail ou pelo link de convite. Depois, reabra o repositório com essa conta.</p>
+      <p>Ter o link do projeto não concede permissão de escrita. Não publique dados reais nem altere a visibilidade para contornar o convite. Veja <a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/repository-access-and-collaboration/inviting-collaborators-to-a-personal-repository">convites para colaboradores</a>.</p>
+    </section>
+    <section id="push">
+      <h2>Push rejeitado: “non-fast-forward” ou “fetch first”</h2>
+      <p>A dupla pode ter enviado commits que sua cópia ainda não tem. Combine quem está editando, confira a branch com <code>git branch --show-current</code> e execute <code>git status</code>. Se houver alterações locais, conclua e registre sua etapa antes de integrar; se não souber o que registrar, peça ajuda.</p>
+      <p>Com a árvore de trabalho limpa, e <strong>na branch compartilhada da atividade</strong>, busque e integre o remoto. O exemplo usa <code>main</code>; substitua pelo nome combinado se for outro:</p>
+      <pre tabindex="0" aria-label="Integrar histórico da branch compartilhada"><code>git fetch origin
+git log --oneline --graph --all -8
+git merge origin/main
+git status</code></pre>
+      <p>Se o merge abrir um editor para a mensagem do commit, salve e feche para concluir. Se aparecer conflito, use a próxima seção. Depois de conferir o resultado e concluir a integração, tente <code>git push origin main</code> novamente. Fonte: <a href="https://docs.github.com/en/get-started/using-git/dealing-with-non-fast-forward-errors">push rejeitado por histórico divergente</a>.</p>
+      <p>“Permission denied”, “protected branch” e regras de revisão são outros problemas: confira conta, convite e fluxo de pull request com a dupla. Não tente sobrescrever o histórico remoto.</p>
+    </section>
+    <section id="conflito">
+      <h2>Conflito: “CONFLICT” ou “unmerged paths”</h2>
+      <ol>
+        <li>Execute <code>git status</code> e abra no editor os arquivos indicados.</li>
+        <li>Encontre os marcadores <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code> e <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>. Converse com a dupla, escolha ou combine o conteúdo final e remova os três marcadores.</li>
+        <li>Salve e confira o arquivo, incluindo a página no navegador. Prepare apenas o arquivo resolvido, por exemplo <code>git add index.html</code>.</li>
+        <li>Execute <code>git status</code>. Quando todos os conflitos estiverem resolvidos, conclua com <code>git commit -m "Resolve conflito em dupla"</code>, confira o resultado e envie quando combinado.</li>
+      </ol>
+      <p>Se quiser interromper a tentativa de merge, peça ajuda antes. <code>git merge --abort</code> tenta retornar ao estado anterior; se havia alterações sem commit antes do merge, a recuperação pode falhar. Preserve uma cópia dos arquivos importantes fora do repositório antes de qualquer recuperação. Não apague arquivos para fazer a mensagem sumir.</p>
+      <p>Fontes: <a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-using-the-command-line">resolver conflito pela linha de comando</a> e <a href="https://git-scm.com/docs/git-merge">manual de git merge</a>.</p>
+    </section>
+  </main>
+  <footer><p>Fontes oficiais verificadas em 20/10/2026. <a href="preparacao.html">Rever preparação</a> · <a href="../index.html">Voltar à oficina</a>.</p></footer>
+</div>
+</body>
+</html>
