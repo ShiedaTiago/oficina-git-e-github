@@ -1,0 +1,45 @@
+:root {
+  color-scheme: light;
+  font-family: system-ui, sans-serif;
+  color: #24302a;
+  background: #f3efe5;
+}
+
+body {
+  display: grid;
+  min-height: 100vh;
+  margin: 0;
+  padding: 1.5rem;
+  place-items: center;
+}
+
+main {
+  box-sizing: border-box;
+  width: min(38rem, 100%);
+  padding: clamp(2rem, 7vw, 4rem);
+  border: 2px solid #2f604b;
+  border-radius: 1rem;
+  background: #fffdf8;
+  box-shadow: .5rem .5rem 0 #e4c85b;
+}
+
+h1 {
+  margin: .25rem 0 1rem;
+  font-size: clamp(2.25rem, 8vw, 4.5rem);
+  line-height: 1;
+}
+
+p { line-height: 1.6; }
+
+.etiqueta {
+  color: #8b341f;
+  font-size: .8rem;
+  font-weight: 750;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+#mensagem {
+  font-size: 1.25rem;
+  font-weight: 650;
+}
