@@ -180,8 +180,8 @@
     {
       id: 'branch-e-head', chapter: 'branches', title: 'Branch é um nome que aponta para um commit.',
       blocks: [
-        { type: 'diagram', steps: ['A → B · base compartilhada', 'main → B', 'melhoria → B · pode seguir outro caminho', 'HEAD → branch atual'] },
-        { type: 'text', text: 'Uma branch permite desenvolver uma ideia sem mover main. Os próximos commits avançam a branch atual.' },
+        { type: 'diagram', steps: ['commit A → commit B · histórico existente', 'main → commit B · main termina aqui', 'melhoria → commit B · começa no mesmo ponto', 'HEAD → melhoria · esta é a branch em uso'] },
+        { type: 'text', text: 'Ao criar um novo commit, apenas a branch em uso avança. Neste exemplo, melhoria avançaria e main continuaria no commit B.' },
       ],
       notes: { objective: 'Compreender branches como referências no mesmo histórico.', minutes: 4,
         demo: 'Desenhar dois rótulos no mesmo commit e mover apenas o rótulo da branch que recebe um novo commit.',

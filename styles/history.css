@@ -26,4 +26,5 @@
   .history-simulator svg { max-height: 72px; }
   .history-controls { margin-top: .25rem; }
   .history-controls button { min-height: 28px; padding-block: .2rem; font-size: .68rem; }
+  .history-simulator.has-conflict textarea { margin-block: .25rem .4rem; padding-block: .4rem; }
 }

@@ -39,3 +39,5 @@
   .quiz-progress, .learning-quiz > [role="status"] { margin-bottom: .2rem; font-size: .68rem; }
   .quiz-controls button { min-height: 28px; padding-block: .2rem; font-size: .68rem; }
 }
+.presentation button,
+.presentation .creator-link { min-width: 44px; min-height: 44px; }

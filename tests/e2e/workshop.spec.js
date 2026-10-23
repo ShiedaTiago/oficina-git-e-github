@@ -75,6 +75,50 @@ test('permite pesquisar comandos pelo botão em tela móvel', async ({ page }) =
   await expect(page.locator('[data-reference]')).toBeVisible();
 });
 
+test('mantém o conteúdo em tamanho natural e rolável no celular em pé', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.goto(`${workshopUrl}#simular-staging`);
+  await page.evaluate(() => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))));
+
+  const metrics = await page.evaluate(() => {
+    const body = document.querySelector('.presentation-body');
+    const canvas = document.querySelector('.slide-content');
+    return {
+      documentWidth: document.documentElement.scrollWidth,
+      viewportWidth: document.documentElement.clientWidth,
+      overflowY: getComputedStyle(body).overflowY,
+      scrollHeight: body.scrollHeight,
+      clientHeight: body.clientHeight,
+      zoom: Number.parseFloat(getComputedStyle(canvas).zoom),
+    };
+  });
+
+  expect(metrics.documentWidth).toBeLessThanOrEqual(metrics.viewportWidth);
+  expect(metrics.overflowY).toBe('auto');
+  expect(metrics.scrollHeight).toBeGreaterThan(metrics.clientHeight);
+  expect(metrics.zoom).toBe(1);
+
+  await page.locator('.presentation-body').evaluate((body) => { body.scrollTop = body.scrollHeight; });
+  await page.getByRole('button', { name: 'Próximo →' }).click();
+  await expect.poll(() => page.locator('.presentation-body').evaluate((body) => body.scrollTop)).toBe(0);
+});
+
+test('mantém os controles principais confortáveis para toque', async ({ page }) => {
+  for (const viewport of [{ width: 390, height: 844 }, { width: 844, height: 390 }]) {
+    await page.setViewportSize(viewport);
+    await page.goto(`${workshopUrl}#simular-historico`);
+
+    const undersized = await page.locator('button:visible').evaluateAll((buttons) => buttons
+      .map((button) => {
+        const box = button.getBoundingClientRect();
+        return { label: button.textContent.trim(), width: box.width, height: box.height };
+      })
+      .filter(({ width, height }) => width < 44 || height < 44));
+
+    expect(undersized, `${viewport.width}x${viewport.height}`).toEqual([]);
+  }
+});
+
 test('exibe tooltip flutuante ao passar o mouse ou focar linhas de comando', async ({ page }) => {
   await page.goto(`${workshopUrl}#terminal-e-pasta`);
 

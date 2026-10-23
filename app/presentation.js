@@ -698,6 +698,7 @@
       cleanups.forEach((cleanup) => cleanup());
       cleanups = [];
       main.replaceChildren();
+      body.scrollTop = 0;
       const slide = deck[index];
       if (!slide) {
         main.append(element('h1', '', 'Nenhum slide disponível.'));
