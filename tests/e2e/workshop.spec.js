@@ -22,6 +22,15 @@ test('apresenta a oficina e se adapta à área visível', async ({ page }) => {
   expect(dimensions.larguraDoDocumento).toBeLessThanOrEqual(dimensions.larguraVisivel);
 });
 
+test('mostra créditos com links diretos para Instagram e LinkedIn', async ({ page }) => {
+  const instagram = page.getByRole('link', { name: /Instagram: @soulbleederr/ });
+  const linkedin = page.getByRole('link', { name: /LinkedIn de Tiago Torres/ });
+  await expect(instagram).toHaveAttribute('href', 'https://www.instagram.com/soulbleederr/');
+  await expect(linkedin).toHaveAttribute('href', 'https://www.linkedin.com/in/tiago-torres-02a07926a/');
+  await expect(instagram.locator('svg')).toBeAttached();
+  await expect(linkedin.locator('svg')).toBeAttached();
+});
+
 test('permite conduzir a apresentação pelo teclado', async ({ page }) => {
   const heading = page.getByRole('heading', { level: 1 });
   const firstTitle = await heading.textContent();

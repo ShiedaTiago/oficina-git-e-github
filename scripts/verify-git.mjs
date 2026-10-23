@@ -23,7 +23,7 @@ const configure = (repo, name) => {
   git(repo, ['config', '--local', 'user.email', 'oficina@example.invalid']);
   git(repo, ['config', '--local', 'core.autocrlf', 'false']);
 };
-const write = (repo, file, content) => writeFileSync(join(repo, file), content, 'utf8');
+const write = (repo, file, content) => writeFileSync(join(repo, file), content.replace(/\r\n?/g, '\n'), 'utf8');
 const commit = (repo, message) => git(repo, ['commit', '-m', message]);
 const head = repo => git(repo, ['rev-parse', 'HEAD']);
 const clean = repo => assert.equal(git(repo, ['status', '--porcelain']), '');

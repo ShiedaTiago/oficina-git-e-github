@@ -2,6 +2,8 @@
 
 O conteúdo de Git e GitHub, os exemplos e os diagramas desta oficina foram escritos para este material, em português brasileiro. O código da apresentação usa recursos locais e fontes do sistema; os slides não incorporam imagens, logotipos, fontes remotas, capturas de tela ou bibliotecas de execução de terceiros.
 
+Créditos da página: **Tiago Torres** — [Instagram @soulbleederr](https://www.instagram.com/soulbleederr/) e [LinkedIn](https://www.linkedin.com/in/tiago-torres-02a07926a/). Os ícones sociais exibidos no rodapé da apresentação são SVGs inline próprios, sem dependências externas.
+
 A organização didática recebeu como referência [oficina-docker-ifrs, de JoaoLucasDaSilvaOliveira](https://github.com/JoaoLucasDaSilvaOliveira/oficina-docker-ifrs): apresentação navegável, notas de facilitação, simulações e material prático. Nenhum código ou recurso desse repositório foi copiado ou adaptado para os arquivos de conteúdo desta oficina. A identidade visual e o roteiro de Git/GitHub são próprios deste material.
 
 Os conceitos foram conferidos nos manuais oficiais do [Git](https://git-scm.com/docs), no livro [Pro Git](https://git-scm.com/book/en/v2), de **Scott Chacon e Ben Straub**, e no [GitHub Docs](https://docs.github.com). As fontes por assunto e a data da consulta estão em [REFERENCIAS.md](REFERENCIAS.md).
